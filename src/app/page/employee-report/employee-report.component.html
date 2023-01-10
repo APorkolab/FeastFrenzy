@@ -1,0 +1,41 @@
+<table>
+	<tr>
+		<th>Dolgozó</th>
+		<th>Termék</th>
+		<th>Mennyiség</th>
+		<th>Ár</th>
+		<th>Dátum</th>
+	</tr>
+	<tr *ngFor="let sale of sales">
+		<td>{{ sale.employee }}</td>
+		<td>{{ sale.product }}</td>
+		<td>{{ sale.quantity }}</td>
+		<td>{{ sale.price }}</td>
+		<td>{{ sale.date }}</td>
+	</tr>
+</table>
+<form>
+	<label>
+		Kiválasztott hónap:
+		<select [(ngModel)]="selectedMonth" (change)="getEmployeeReport()" name="month">
+			<option *ngFor="let employee of employees" [ngValue]="employee.month">
+				{{ employee.month }}
+			</option>
+		</select>
+	</label>
+</form>
+<form (ngSubmit)="updatePrices()">
+	<label>
+		Kávé ára:
+		<input type="number" [(ngModel)]="newPrices.coffee" name="coffee">
+	</label>
+	<label>
+		Üdítő ára:
+		<input type="number" [(ngModel)]="newPrices.soda" name="soda">
+	</label>
+	<label>
+		Menü ára:
+		<input type="number" [(ngModel)]="newPrices.menu" name="menu">
+	</label>
+	<input type="submit" value="Árak frissítése">
+</form>

@@ -1,0 +1,37 @@
+<table>
+	<tr>
+		<th>Dolgozó</th>
+		<th>Termék</th>
+		<th>Mennyiség</th>
+		<th>Ár</th>
+		<th>Dátum</th>
+		<th>Műveletek</th>
+	</tr>
+	<tr *ngFor="let sale of sales">
+		<td>{{ sale.employee }}</td>
+		<td>{{ sale.product }}</td>
+		<td>{{ sale.quantity }}</td>
+		<td>{{ sale.price }}</td>
+		<td>{{ sale.date }}</td>
+		<td>
+			<button (click)="editSale(sale)">Szerkesztés</button>
+			<button (click)="deleteSale(sale)">Törlés</button>
+		</td>
+	</tr>
+</table>
+
+<form (ngSubmit)="addSale()">
+	<label>
+		Dolgozó:
+		<input type="text" [(ngModel)]="newSale.employee" name="employee">
+	</label>
+	<label>
+		Termék:
+		<input type="text" [(ngModel)]="newSale.product" name="product">
+	</label>
+	<label>
+		Mennyiség:
+		<input type="number" [(ngModel)]="newSale.quantity" name="quantity">
+	</label>
+	<input type="submit" value="Értékesítés hozzáadása">
+</form>
