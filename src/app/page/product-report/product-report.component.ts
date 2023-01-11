@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 export class ProductReportComponent implements OnInit {
 
   products: any[] = [];
-  selectedMonth: string;
+  selectedMonth!: string;
 
   constructor(private http: HttpClient) { }
 
