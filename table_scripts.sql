@@ -16,14 +16,16 @@ CREATE TABLE sales (
 CREATE TABLE employees (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    employee_number VARCHAR(255) NOT NULL
+    employee_number VARCHAR(255) NOT NULL,
+    UNIQUE (employee_number)
 );
 
 -- Termékek tábla létrehozása
 CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR (255) NOT NULL,
-price DECIMAL(10,2) NOT NULL
+    price DECIMAL(10,2) NOT NULL,
+    UNIQUE (name)
 );
 
 -- Alapadatok hozzáadása a dolgozók táblához
@@ -33,6 +35,6 @@ INSERT INTO employees (name, employee_number) VALUES
 
 -- Alapadatok hozzáadása a termékek táblához
 INSERT INTO products (name, price) VALUES
-('Soup', '3.99'),
-('Sandwich', '5.99'),
-('Coffee', '2.50');
+('Soup', 3.99),
+('Sandwich', 5.99),
+('Coffee', 2.50);
