@@ -1,38 +1,55 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
-
-interface Sale {
-  employee: string;
-  product: string;
-  quantity: number;
-  price: number;
-  date: Date;
-}
+import { Employee } from 'src/app/model/employee';
+import { EmployeeService } from 'src/app/service/employee.service';
+import { Sale } from 'src/app/model/sale';
+import { SaleService } from 'src/app/service/sale.service';
 
 @Component({
   selector: 'app-employee-report',
   templateUrl: './employee-report.component.html',
   styleUrls: ['./employee-report.component.css']
 })
+export class EmployeeReportComponent implements OnInit {
 
-export class EmployeeReportComponent {
+  employees: Employee[] = [];
   sales: Sale[] = [];
-  newPrices = {
-    coffee: 0,
-    soda: 0,
-    menu: 0
-  };
+  month!: number;
+  year!: number;
+  employeeSales!: Map<Employee, number>;
 
-  employees: any[] = [];
-  selectedMonth!: string;
+  constructor(private employeeService: EmployeeService, private saleService: SaleService) { }
 
-  constructor(private http: HttpClient) { }
+  ngOnInit() {
+    this.getEmployees();
+    this.getSales();
+    this.employeeSales = new Map<Employee, number>();
+    const currentDate = new Date();
+    this.month = currentDate.getMonth();
+    this.year = currentDate.getFullYear();
+  }
 
+  getEmployees(): void {
+    this.employeeService.getEmployees()
+      .subscribe(employees => this.employees = employees);
+  }
 
-  getEmployeeReport() {
-    this.http.get(`api/employees?month=${this.selectedMonth}`).subscribe(data => {
-      this.employees = data;
+  getSales(): void {
+    this.saleService.getSales()
+      .subscribe(sales => this.sales = sales);
+  }
+
+  calculateEmployeeSales(): void {
+    this.employeeSales.clear();
+    this.employees.forEach(employee => this.employeeSales.set(employee, 0));
+
+    this.sales.forEach(sale => {
+      const saleDate = new Date(sale.date);
+      if (saleDate.getMonth() === this.month && saleDate.getFullYear() === this.year) {
+        const employee = this.employees.find(e => e.id === sale.employeeId);
+        if (employee) {
+          this.employeeSales.set(employee, this.employeeSales.get(employee) + sale.total);
+        }
+      }
     });
   }
 

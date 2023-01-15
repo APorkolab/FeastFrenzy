@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Employee } from 'src/app/model/employee';
-import { EmployeeService } from 'src/app/services/employee.service';
+
 import { ActivatedRoute } from '@angular/router';
+import { EmployeeService } from 'src/app/service/employee.service';
+import { FormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-employee-detail',
@@ -22,9 +25,15 @@ export class EmployeeDetailComponent implements OnInit {
   }
 
   getEmployee(): void {
-    const id = +this.route.snapshot.paramMap.get('id');
+    const id = +this.route.snapshot.paramMap.get('id')!;
     this.employeeService.getEmployee(id)
-      .subscribe(employee => this.employee = employee);
+      .subscribe(employee => {
+        if (employee) {
+          this.employee = employee;
+        }
+      });
   }
+
+
 
 }

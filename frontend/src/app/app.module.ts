@@ -12,7 +12,6 @@ import { EmployeesComponent } from './page/employees/employees.component';
 import { ProductsComponent } from './page/products/products.component';
 import { PageNotFoundComponent } from './page/page-not-found/page-not-found.component';
 import { SalesReportComponent } from './page/sales-report/sales-report.component';
-import { EmployeeDetailCComponent } from './page/employee-detail-c/employee-detail-c.component';
 import { EmployeeDetailComponent } from './page/employee-detail/employee-detail.component';
 import { SaleDetailComponent } from './page/sale-detail/sale-detail.component';
 import { ProductDetailComponent } from './page/product-detail/product-detail.component';
@@ -28,7 +27,6 @@ import { ProductDetailComponent } from './page/product-detail/product-detail.com
     ProductsComponent,
     PageNotFoundComponent,
     SalesReportComponent,
-    EmployeeDetailCComponent,
     EmployeeDetailComponent,
     SaleDetailComponent,
     ProductDetailComponent
