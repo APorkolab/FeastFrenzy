@@ -15,6 +15,10 @@ import { SalesReportComponent } from './page/sales-report/sales-report.component
 import { EmployeeDetailComponent } from './page/employee-detail/employee-detail.component';
 import { SaleDetailComponent } from './page/sale-detail/sale-detail.component';
 import { ProductDetailComponent } from './page/product-detail/product-detail.component';
+import { PurchaseComponent } from './page/purchase/purchase.component';
+import { PurchasesComponent } from './page/purchases/purchases.component';
+import { PurchaseDetailComponent } from './page/purchase-detail/purchase-detail.component';
+import { PurchaseReportComponent } from './page/purchase-report/purchase-report.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +33,11 @@ import { ProductDetailComponent } from './page/product-detail/product-detail.com
     SalesReportComponent,
     EmployeeDetailComponent,
     SaleDetailComponent,
-    ProductDetailComponent
+    ProductDetailComponent,
+    PurchaseComponent,
+    PurchasesComponent,
+    PurchaseDetailComponent,
+    PurchaseReportComponent
   ],
   imports: [
     BrowserModule,

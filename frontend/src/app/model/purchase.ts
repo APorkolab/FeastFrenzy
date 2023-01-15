@@ -5,4 +5,6 @@ export class Purchase {
 	date!: Date;
 	closed!: boolean;
 	purchaseItems!: PurchaseItem[];
+	employeeId!: number;
+	total!: number;
 }

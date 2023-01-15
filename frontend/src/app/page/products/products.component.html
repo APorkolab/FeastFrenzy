@@ -1,1 +1,19 @@
-<p>products works!</p>
+<table>
+	<tr>
+		<th>ID</th>
+		<th>Name</th>
+		<th>Price</th>
+		<th>Actions</th>
+	</tr>
+	<tr *ngFor="let product of products">
+		<td>{{product.id}}</td>
+		<td>{{product.name}}</td>
+		<td>{{product.price}}</td>
+		<td>
+			<a routerLink="/products/{{product.id}}">View</a>
+			<a routerLink="/products/{{product.id}}/edit">Edit</a>
+			<a (click)="deleteProduct(product)">Delete</a>
+		</td>
+	</tr>
+</table>
+<a routerLink="/products/new">Add Product</a>
