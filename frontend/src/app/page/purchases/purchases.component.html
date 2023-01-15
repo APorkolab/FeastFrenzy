@@ -1,37 +1,36 @@
 <table>
 	<tr>
-		<th>Dolgozó</th>
-		<th>Termék</th>
-		<th>Mennyiség</th>
-		<th>Ár</th>
-		<th>Dátum</th>
-		<th>Műveletek</th>
+		<th>Employee ID</th>
+		<th>Product ID</th>
+		<!-- <th>Quantity</th> -->
+		<th>Price</th>
+		<th>Date</th>
+		<th>Actions</th>
 	</tr>
 	<tr *ngFor="let purchase of purchases">
 		<td>{{ purchase.employeeId }}</td>
-		<td>{{ purchase.product }}</td>
-		<td>{{ purchase.quantity }}</td>
-		<td>{{ purchase.price }}</td>
+		<td>{{ purchase.purchaseItems }}</td>
+		<!-- <td>{{ purchase.quantity }}</td> -->
+		<td>{{ purchase.total }}</td>
 		<td>{{ purchase.date }}</td>
 		<td>
-			<button (click)="editPurchase(purchase)">Szerkesztés</button>
-			<button (click)="deletePurchase(purchase)">Törlés</button>
+			<button (click)="editPurchase(purchase)">Edit</button>
+			<button (click)="deletePurchase(purchase)">Delete</button>
 		</td>
 	</tr>
 </table>
-
 <form (ngSubmit)="addPurchase()">
 	<label>
-		Dolgozó:
-		<input type="text" [(ngModel)]="newPurchase.employeeId" name="employee">
+		Employee:
+		<input type="text" [(ngModel)]="newPurchase.employeeId" name="employeeId">
 	</label>
 	<label>
-		Termék:
-		<input type="text" [(ngModel)]="newPurchase.product" name="product">
+		Product:
+		<input type="text" [(ngModel)]="newPurchase.purchaseItems" name="purchaseItems">
 	</label>
-	<label>
-		Mennyiség:
+	<!-- <label>
+		Quantity:
 		<input type="number" [(ngModel)]="newPurchase.quantity" name="quantity">
-	</label>
-	<input type="submit" value="Értékesítés hozzáadása">
+	</label> -->
+	<input type="submit" value="Add Purchase">
 </form>

@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class ProductService {
 
-  private productUrl = '/products';
+  private productUrl = ' http://localhost:3000/products';
   products: Product[] = [];
   selectedMonth!: string;
 

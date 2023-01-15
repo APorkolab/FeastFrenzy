@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class PurchaseService {
 
-  private purchaseUrl = '/purchases';
+  private purchaseUrl = ' http://localhost:3000/purchases';
 
   constructor(private http: HttpClient) { }
 
