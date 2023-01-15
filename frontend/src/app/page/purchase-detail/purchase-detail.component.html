@@ -1,1 +1,25 @@
-<p>purchase-detail works!</p>
+<div class="container">
+	<h1>Purchase Details</h1>
+	<p>ID: {{ purchase.id }}</p>
+	<p>Date: {{ purchase.date }}</p>
+	<p>Closed: {{ purchase.closed ? 'Yes' : 'No' }}</p>
+	<p>Employee ID: {{ purchase.employeeId }}</p>
+	<p>Total: {{ purchase.total }}</p>
+	<h2>Purchase Items</h2>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Product</th>
+				<th>Quantity</th>
+				<th>Price</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let item of purchase.purchaseItems">
+				<td>{{ item.productId }}</td>
+				<td>{{ item.quantity }}</td>
+				<td>{{ item.price * item.quantity }}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

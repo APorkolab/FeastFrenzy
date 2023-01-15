@@ -8,7 +8,7 @@
 		<th>Műveletek</th>
 	</tr>
 	<tr *ngFor="let purchase of purchases">
-		<td>{{ purchase.employee }}</td>
+		<td>{{ purchase.employeeId }}</td>
 		<td>{{ purchase.product }}</td>
 		<td>{{ purchase.quantity }}</td>
 		<td>{{ purchase.price }}</td>
@@ -23,7 +23,7 @@
 <form (ngSubmit)="addPurchase()">
 	<label>
 		Dolgozó:
-		<input type="text" [(ngModel)]="newPurchase.employee" name="employee">
+		<input type="text" [(ngModel)]="newPurchase.employeeId" name="employee">
 	</label>
 	<label>
 		Termék:

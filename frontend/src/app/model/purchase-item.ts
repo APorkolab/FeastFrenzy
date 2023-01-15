@@ -6,4 +6,5 @@ export class PurchaseItem {
 	purchaseId!: number;
 	quantity!: number;
 	purchase!: Purchase;
+	price: any;
 }

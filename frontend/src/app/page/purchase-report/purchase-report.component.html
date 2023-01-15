@@ -1,1 +1,32 @@
-<p>purchase-report works!</p>
+<table>
+	<tr>
+		<th>Product ID</th>
+		<th>Name</th>
+		<th>Consumption Quantity</th>
+		<th>Price</th>
+	</tr>
+	<tr *ngFor="let product of products">
+		<td>{{product.id}}</td>
+		<td>{{product.name}}</td>
+		<td>{{product.quantity}}</td>
+		<td>{{product.price}}</td>
+	</tr>
+</table>
+<div class="form-group">
+	<label for="monthSelect">Select Month</label>
+	<select class="form-control" id="monthSelect" [(ngModel)]="selectedMonth" name="month">
+		<option value="january">January</option>
+		<option value="february">February</option>
+		<option value="march">March</option>
+		<option value="april">April</option>
+		<option value="may">May</option>
+		<option value="june">June</option>
+		<option value="july">July</option>
+		<option value="august">August</option>
+		<option value="september">September</option>
+		<option value="october">October</option>
+		<option value="november">November</option>
+		<option value="december">December</option>
+	</select>
+</div>
+<button class="btn btn-primary" (click)="getPurchaseReport()">Get Report</button>
