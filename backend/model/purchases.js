@@ -1,21 +1,12 @@
 const sequelize = require("sequelize");
 const db = require("../config/database");
 
-
 const purchase = db.define(
 	"purchase", {
 		id: {
 			type: sequelize.INTEGER,
 			primaryKey: true,
 			autoIncrement: true
-		},
-		employee_id: {
-			type: sequelize.INTEGER,
-			allowNull: false,
-			references: {
-				model: 'employees',
-				key: 'id'
-			}
 		},
 		date: {
 			type: sequelize.DATE,
@@ -25,17 +16,29 @@ const purchase = db.define(
 			type: sequelize.BOOLEAN,
 			allowNull: false,
 			defaultValue: false
+		},
+		purchaseItems: {
+			type: sequelize.ARRAY(sequelize.JSON),
+			allowNull: true
+		},
+		employeeId: {
+			type: sequelize.INTEGER,
+			allowNull: false
+		},
+		total: {
+			type: sequelize.DECIMAL(10, 2),
+			allowNull: true
 		}
 	}, {
-		timestamps: false,
+		timestamps: false
 	});
 purchase.associate = function (models) {
 	purchase.hasMany(models.purchase_items, {
 		foreignKey: 'purchase_id',
-		as: 'items',
+		as: 'purchaseItems',
 	});
 	purchase.belongsTo(models.employees, {
-		foreignKey: 'employee_id',
+		foreignKey: 'employeeId',
 		as: 'employee',
 	});
 };

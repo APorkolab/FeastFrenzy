@@ -1,7 +1,6 @@
 const sequelize = require("sequelize");
 const db = require("../config/database");
 
-
 const employees = db.define(
 	"employees", {
 		id: {
@@ -17,6 +16,10 @@ const employees = db.define(
 			type: sequelize.STRING,
 			allowNull: false,
 			unique: true
+		},
+		monthlyConsumptionValue: {
+			type: sequelize.INTEGER,
+			allowNull: false
 		}
 	}, {
 		timestamps: false
@@ -26,6 +29,5 @@ employees.associate = function (models) {
 		foreignKey: 'employee_id'
 	});
 };
-
 
 module.exports = employees;

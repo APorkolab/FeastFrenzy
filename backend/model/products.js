@@ -17,14 +17,20 @@ const products = db.define(
 		price: {
 			type: sequelize.DECIMAL(10, 2),
 			allowNull: false
+		},
+		purchaseItems: {
+			type: sequelize.ARRAY(sequelize.JSON),
+			allowNull: true
 		}
 	}, {
 		timestamps: false
 	});
+
 products.associate = function (models) {
 	products.hasMany(models.PurchaseItems, {
 		foreignKey: 'product_id'
 	});
 };
+
 
 module.exports = products;

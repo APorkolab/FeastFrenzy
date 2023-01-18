@@ -9,29 +9,38 @@ const purchaseItems = db.define(
 			primaryKey: true,
 			autoIncrement: true
 		},
-		purchase_id: {
+		purchaseId: {
 			type: sequelize.INTEGER,
 			allowNull: false
 		},
-		product_id: {
+		productId: {
+			type: sequelize.INTEGER,
+			allowNull: false
+		},
+		productId: {
 			type: sequelize.INTEGER,
 			allowNull: false
 		},
 		quantity: {
 			type: sequelize.INTEGER,
 			allowNull: false
+		},
+		purchase: {
+			type: sequelize.JSON,
+			allowNull: true
 		}
 	}, {});
 
 purchaseItems.associate = (models) => {
-	purchaseItems.belongsTo(models.Sales, {
-		foreignKey: 'purchase_id',
+	purchaseItems.belongsTo(models.Purchase, {
+		foreignKey: 'purchaseId',
 		onDelete: 'CASCADE',
 	});
-	purchaseItems.belongsTo(models.Products, {
-		foreignKey: 'product_id',
+	purchaseItems.belongsTo(models.Product, {
+		foreignKey: 'productId',
 		onDelete: 'CASCADE',
 	});
 };
+
 
 module.exports = purchaseItems;
