@@ -7,7 +7,7 @@ import { PurchaseService } from 'src/app/service/purchase.service';
 @Component({
   selector: 'app-purchase-detail',
   templateUrl: './purchase-detail.component.html',
-  styleUrls: ['./purchase-detail.component.css']
+  styles: ['']
 })
 
 export class PurchaseDetailComponent implements OnInit {

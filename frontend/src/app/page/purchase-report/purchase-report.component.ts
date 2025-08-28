@@ -5,7 +5,7 @@ import { Purchase } from 'src/app/model/purchase';
 @Component({
   selector: 'app-purchase-report',
   templateUrl: './purchase-report.component.html',
-  styleUrls: ['./purchase-report.component.css']
+  styles: ['']
 })
 export class PurchaseReportComponent implements OnInit {
   purchases: Purchase[] = [];

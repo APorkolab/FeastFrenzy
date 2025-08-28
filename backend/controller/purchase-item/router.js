@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const purchaseItemModel = require('../../model/purchaseItems');
+const { purchaseItems } = require('../../model');
 
-const controller = require('../base/controller')(purchaseItemModel);
+const controller = require('../base/controller')(purchaseItems);
 
 
 // Create

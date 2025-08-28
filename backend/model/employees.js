@@ -1,33 +1,32 @@
-const sequelize = require("sequelize");
-const db = require("../config/database");
+module.exports = (sequelize, DataTypes) => {
+    const employees = sequelize.define(
+        "employees", {
+            id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true
+            },
+            name: {
+                type: DataTypes.STRING,
+                allowNull: false
+            },
+            employee_number: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                unique: true
+            },
+            monthlyConsumptionValue: {
+                type: DataTypes.INTEGER,
+                allowNull: false
+            }
+        }, {
+            timestamps: false
+        });
+    employees.associate = function (models) {
+        employees.hasMany(models.purchases, {
+            foreignKey: 'employeeId'
+        });
+    };
 
-const employees = db.define(
-	"employees", {
-		id: {
-			type: sequelize.INTEGER,
-			primaryKey: true,
-			autoIncrement: true
-		},
-		name: {
-			type: sequelize.STRING,
-			allowNull: false
-		},
-		employee_number: {
-			type: sequelize.STRING,
-			allowNull: false,
-			unique: true
-		},
-		monthlyConsumptionValue: {
-			type: sequelize.INTEGER,
-			allowNull: false
-		}
-	}, {
-		timestamps: false
-	});
-employees.associate = function (models) {
-	employees.hasMany(models.Sales, {
-		foreignKey: 'employee_id'
-	});
+    return employees;
 };
-
-module.exports = employees;

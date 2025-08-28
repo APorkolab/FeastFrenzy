@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const employeeModel = require('../../model/employees');
+const { employees } = require('../../model');
 
-const controller = require('../base/controller')(employeeModel);
+const controller = require('../base/controller')(employees);
 
 
 // Create

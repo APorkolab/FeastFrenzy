@@ -5,14 +5,12 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --require test/test_helper.js 'test/**/*.js'"
   },
   "author": "Ádám Dr. Porkoláb",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",
-    "body-parser": "^2.2.0",
-    "config": "^3.3.7",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "dotenv-cli": "^6.0.0",
@@ -26,12 +24,14 @@
     "sequelize-bcrypt": "^1.2.0",
     "should": "^13.2.3",
     "sqlite3": "^5.1.2",
-    "supertest": "^6.2.3",
     "swagger-ui-express": "^4.4.0",
     "winston": "^3.7.2",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "chai": "^4.3.7",
+    "mocha": "^10.1.0",
+    "nodemon": "^2.0.20",
+    "supertest": "^6.2.3"
   }
 }

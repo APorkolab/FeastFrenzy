@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-product-report',
   templateUrl: './product-report.component.html',
-  styleUrls: ['./product-report.component.css']
+  styles: ['']
 })
 export class ProductReportComponent implements OnInit {
 

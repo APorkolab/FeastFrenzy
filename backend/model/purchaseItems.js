@@ -1,46 +1,29 @@
-const sequelize = require("sequelize");
-const db = require("../config/database");
+module.exports = (sequelize, DataTypes) => {
+    const purchaseItems = sequelize.define(
+        "purchaseItems", {
+            id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true
+            },
+            quantity: {
+                type: DataTypes.INTEGER,
+                allowNull: false
+            }
+        }, {
+            timestamps: false
+        });
 
+    purchaseItems.associate = (models) => {
+        purchaseItems.belongsTo(models.purchases, {
+            foreignKey: 'purchaseId',
+            onDelete: 'CASCADE',
+        });
+        purchaseItems.belongsTo(models.products, {
+            foreignKey: 'productId',
+            onDelete: 'CASCADE',
+        });
+    };
 
-const purchaseItems = db.define(
-	"purchaseItems", {
-		id: {
-			type: sequelize.INTEGER,
-			primaryKey: true,
-			autoIncrement: true
-		},
-		purchaseId: {
-			type: sequelize.INTEGER,
-			allowNull: false
-		},
-		productId: {
-			type: sequelize.INTEGER,
-			allowNull: false
-		},
-		productId: {
-			type: sequelize.INTEGER,
-			allowNull: false
-		},
-		quantity: {
-			type: sequelize.INTEGER,
-			allowNull: false
-		},
-		purchase: {
-			type: sequelize.JSON,
-			allowNull: true
-		}
-	}, {});
-
-purchaseItems.associate = (models) => {
-	purchaseItems.belongsTo(models.Purchase, {
-		foreignKey: 'purchaseId',
-		onDelete: 'CASCADE',
-	});
-	purchaseItems.belongsTo(models.Product, {
-		foreignKey: 'productId',
-		onDelete: 'CASCADE',
-	});
+    return purchaseItems;
 };
-
-
-module.exports = purchaseItems;

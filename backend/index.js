@@ -1,17 +1,18 @@
-const config = require('dotenv').config();
-const logger = require('./logger/logger');
 const app = require('./server');
+const logger = require('./logger/logger');
+const db = require('./model');
+
 const port = process.env.PORT || 3000;
-const http = require("http");
 
-
-const server = http.createServer(app);
-
-if (!config) {
-	logger.error('No database config found.');
-	process.exit();
-}
+// db.sequelize.sync({ force: true }).then(() => {
+//     app.listen(port, () => {
+//         logger.info(`App listening at http://localhost:${port}`);
+//     });
+// }).catch(err => {
+//     logger.error('Failed to sync database:', err);
+//     process.exit(1);
+// });
 
 app.listen(port, () => {
-	console.log(`App listening at http://localhost:${port}`);
+    logger.info(`App listening at http://localhost:${port}`);
 });

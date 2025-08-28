@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-employee-report',
   templateUrl: './employee-report.component.html',
-  styleUrls: ['./employee-report.component.css']
+  styles: ['']
 })
 export class EmployeeReportComponent implements OnInit {
 

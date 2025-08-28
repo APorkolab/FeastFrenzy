@@ -1,46 +1,36 @@
-const sequelize = require("sequelize");
-const db = require("../config/database");
+module.exports = (sequelize, DataTypes) => {
+    const purchases = sequelize.define(
+        "purchases", {
+            id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true
+            },
+            date: {
+                type: DataTypes.DATE,
+                allowNull: false
+            },
+            closed: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false,
+                defaultValue: false
+            },
+            total: {
+                type: DataTypes.DECIMAL(10, 2),
+                allowNull: true
+            }
+        }, {
+            timestamps: false
+        });
 
-const purchase = db.define(
-	"purchase", {
-		id: {
-			type: sequelize.INTEGER,
-			primaryKey: true,
-			autoIncrement: true
-		},
-		date: {
-			type: sequelize.DATE,
-			allowNull: false
-		},
-		closed: {
-			type: sequelize.BOOLEAN,
-			allowNull: false,
-			defaultValue: false
-		},
-		purchaseItems: {
-			type: sequelize.ARRAY(sequelize.JSON),
-			allowNull: true
-		},
-		employeeId: {
-			type: sequelize.INTEGER,
-			allowNull: false
-		},
-		total: {
-			type: sequelize.DECIMAL(10, 2),
-			allowNull: true
-		}
-	}, {
-		timestamps: false
-	});
-purchase.associate = function (models) {
-	purchase.hasMany(models.purchase_items, {
-		foreignKey: 'purchase_id',
-		as: 'purchaseItems',
-	});
-	purchase.belongsTo(models.employees, {
-		foreignKey: 'employeeId',
-		as: 'employee',
-	});
+    purchases.associate = function (models) {
+        purchases.hasMany(models.purchaseItems, {
+            as: 'purchaseItems',
+        });
+        purchases.belongsTo(models.employees, {
+            as: 'employee',
+        });
+    };
+
+    return purchases;
 };
-
-module.exports = purchase;
