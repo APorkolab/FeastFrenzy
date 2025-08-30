@@ -19,7 +19,7 @@
     "mariadb": "^3.0.2",
     "morgan": "^1.10.0",
     "mysql2": "^3.14.3",
-    "npkill": "^0.8.3",
+    "npkill": "^0.12.2",
     "sequelize": "^6.25.3",
     "sequelize-bcrypt": "^1.2.0",
     "should": "^13.2.3",
