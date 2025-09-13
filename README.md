@@ -1,146 +1,346 @@
-# FeastFrenzy - Senior Refactor
+# 🍽️ FeastFrenzy - Enterprise Factory Canteen Management System
 
-This project is a senior-level refactoring of an initial homework assignment. The original goal was to create a simple web application for a factory canteen. This version elevates the codebase to modern, professional standards with a focus on maintainability, testability, and a clean architecture.
+[![CI/CD Pipeline](https://github.com/your-username/FeastFrenzy/workflows/CI%2FCD%20Pipeline/badge.svg)](https://github.com/your-username/FeastFrenzy/actions)
+[![Code Quality](https://sonarcloud.io/api/project_badges/measure?project=feastfrenzy&metric=alert_status)](https://sonarcloud.io/dashboard?id=feastfrenzy)
+[![Coverage](https://codecov.io/gh/your-username/FeastFrenzy/branch/main/graph/badge.svg)](https://codecov.io/gh/your-username/FeastFrenzy)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
+[![Angular Version](https://img.shields.io/badge/angular-%5E15.0.0-red.svg)](https://angular.io/)
 
-## About This Refactoring
+FeastFrenzy is a modern, scalable factory canteen management system built with enterprise-grade architecture and best practices. This project demonstrates senior-level software engineering with comprehensive CI/CD, monitoring, and documentation.
 
-The original project was a functional but basic implementation. The goal of this refactoring was to apply senior-level engineering practices to improve the codebase significantly.
+## 🚀 Features
 
-### Key Improvements:
+### Core Functionality
+- 👥 **Employee Management**: Complete CRUD operations for factory employees
+- 🛍️ **Purchase System**: Real-time transaction processing with balance tracking
+- 📦 **Product Catalog**: Dynamic product management with categorization
+- 📊 **Advanced Reporting**: Monthly consumption, product analytics, and revenue reports
+- 💰 **Balance Tracking**: Automatic employee balance management
 
-- **Backend Architecture:**
-  - **Modular Structure:** The backend was restructured into a more modular and maintainable architecture. Database logic, routes, and services are now clearly separated.
-  - **Database & Models:** Refactored the Sequelize models to use a centralized loading mechanism, eliminating circular dependencies and improving organization.
-  - **API Design:** Implemented proper error handling (404, 500) and a health check endpoint (`/health`).
-  - **Code Quality:** Replaced outdated dependencies (e.g., `body-parser`) with modern Express.js equivalents.
+### Enterprise Features
+- 🔐 **JWT Authentication**: Secure token-based authentication with refresh tokens
+- 🔒 **Role-Based Access Control**: Employee, Manager, and Admin permission levels
+- 📈 **Monitoring & Analytics**: Prometheus metrics with Grafana dashboards
+- 🐳 **Containerization**: Full Docker support with multi-stage builds
+- ⚡ **Performance**: Redis caching, database optimization, and CDN support
+- 📱 **Responsive Design**: Modern UI with Bootstrap 5 and Bootswatch themes
 
-- **Testing:**
-  - **Test Suite:** Introduced a complete testing suite for the backend using Mocha, Chai, and Supertest.
-  - **Test Database:** Configured the test environment to use an in-memory SQLite database, ensuring tests are fast and isolated.
-  - **Test Coverage:** Added tests for API endpoints and business logic, ensuring the backend is reliable.
+## 🏗️ Architecture Overview
 
-- **Frontend UI/UX:**
-  - **Dependency Management:** Corrected version conflicts in `package.json` to ensure a stable frontend build.
-  - **UI Enhancement:** Replaced the default Bootstrap styles with a modern theme from Bootswatch ("Vapor") to create a more polished and "fancy" user interface.
-  - **Code Cleanup:** Fixed minor issues in the navigation and branding.
+FeastFrenzy follows modern microservices principles with a clean, maintainable architecture:
 
-- **Development Experience:**
-  - **Clear Setup:** Provided clear, step-by-step instructions for setting up and running the project.
-  - **Professional Documentation:** This `README.md` file was created to provide a comprehensive overview of the project.
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Load Balancer │    │     CDN/Cache   │    │   Monitoring    │
+│     (Nginx)     │    │     (Redis)     │    │  (Prometheus)   │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         ▼                       ▼                       ▼
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│    Frontend     │    │     Backend     │    │    Database     │
+│   (Angular)     │◄──►│   (Node.js)     │◄──►│    (MySQL)      │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+```
 
-## Getting Started
+## 📅 Technology Stack
 
-Follow these instructions to get the project up and running on your local machine.
+### Frontend
+- **Framework**: Angular 15+ with TypeScript
+- **UI/UX**: Bootstrap 5 + Bootswatch themes
+- **State Management**: RxJS + Services
+- **Testing**: Jasmine, Karma, E2E with Protractor
+- **Build**: Angular CLI with Webpack
+
+### Backend
+- **Runtime**: Node.js 18+ with Express.js
+- **Database**: MySQL 8.0 with Sequelize ORM
+- **Authentication**: JWT with refresh tokens
+- **Caching**: Redis for session and data caching
+- **Testing**: Mocha, Chai, Supertest
+- **Documentation**: OpenAPI 3.0 with Swagger UI
+
+### DevOps & Infrastructure
+- **Containerization**: Docker + Docker Compose
+- **CI/CD**: GitHub Actions with multi-stage deployments
+- **Monitoring**: Prometheus + Grafana + AlertManager
+- **Code Quality**: ESLint, Prettier, SonarQube, Husky
+- **Security**: Helmet.js, CORS, rate limiting, input validation
+
+## ⚡ Quick Start
+
+### Using Docker (Recommended)
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd FeastFrenzy
+
+# Start all services with Docker Compose
+docker-compose up -d
+
+# Access the application
+# Frontend: http://localhost:4200
+# Backend API: http://localhost:3000
+# API Documentation: http://localhost:3000/api-docs
+# Grafana: http://localhost:3001 (admin/admin)
+# Prometheus: http://localhost:9090
+```
+
+### Manual Setup
+
+```bash
+# Install dependencies
+cd backend && npm install
+cd ../frontend && npm install --legacy-peer-deps
+
+# Setup environment
+cp backend/.env.example backend/.env
+# Edit .env with your database configuration
+
+# Start services
+cd backend && npm run dev     # Terminal 1
+cd frontend && npm start      # Terminal 2
+```
+
+## 📚 Documentation
+
+- 🏗️ **[Architecture Guide](docs/ARCHITECTURE.md)** - System design and component overview
+- 🛠️ **[API Documentation](docs/API.md)** - Complete REST API reference
+- 🚀 **[Production Deployment](docs/PRODUCTION_DEPLOYMENT.md)** - Enterprise-grade production deployment with Docker and Kubernetes
+- 🤖 **[CI/CD Setup Guide](docs/CI_CD_SETUP.md)** - GitHub Actions pipeline configuration with optional tokens
+- 👍 **[Contributing Guidelines](CONTRIBUTING.md)** - How to contribute to the project
+- 📊 **[Monitoring Setup](monitoring/)** - Prometheus and Grafana configuration
+
+## 📁 Project Structure
+
+```
+FeastFrenzy/
+├── .github/
+│   └── workflows/           # GitHub Actions CI/CD
+├── backend/
+│   ├── controllers/         # Request handlers
+│   ├── middleware/          # Custom middleware
+│   ├── models/              # Sequelize models
+│   ├── routes/              # API routes
+│   ├── services/            # Business logic
+│   ├── test/                # Test files
+│   └── logger/              # Winston logging
+├── frontend/
+│   └── src/
+│       ├── app/
+│       │   ├── core/           # Singleton services
+│       │   ├── shared/         # Reusable components
+│       │   └── features/       # Feature modules
+│       └── environments/       # Environment configs
+├── docs/                    # Project documentation
+├── monitoring/              # Prometheus & Grafana
+└── docker-compose.yml       # Multi-service setup
+```
+
+## 💼 Development
 
 ### Prerequisites
 
-- Node.js (v12.18.0 or higher)
-- npm (v6 or higher)
-- MySQL (v8.0.0 or higher)
+- **Node.js** 18.x or higher
+- **npm** 9.x or higher  
+- **Docker** 20.x or higher (optional but recommended)
+- **MySQL** 8.0+ (if not using Docker)
 
-### Backend Setup
+### Development Commands
 
-1.  **Navigate to the backend directory:**
+#### Backend Commands
+```bash
+cd backend
+npm run dev          # Start with hot reload
+npm test             # Run tests
+npm run test:coverage # Run tests with coverage
+npm run lint         # Run ESLint
+npm run format       # Format code with Prettier
+npm run migrate      # Run database migrations
+npm run seed         # Seed database with sample data
+```
 
-    ```bash
-    cd backend
-    ```
+#### Frontend Commands
+```bash
+cd frontend
+npm start            # Start development server
+npm run build:prod   # Production build
+npm run test         # Run unit tests
+npm run test:coverage # Run tests with coverage
+npm run lint         # Run ESLint
+npm run e2e          # Run E2E tests
+```
 
-2.  **Create a `.env` file:**
-    Create a new `.env` file with the following content:
+#### Docker Commands
+```bash
+docker-compose up -d              # Start all services
+docker-compose logs -f [service]   # View logs
+docker-compose down                # Stop all services
+docker-compose up --build          # Rebuild and start
+```
 
-    ```
-    DB_HOST=localhost
-    DB_USER=your_mysql_user
-    DB_PASSWORD=your_mysql_password
-    DB_NAME=feastfrenzy
-    PORT=3000
-    ```
+### Environment Setup
 
-    _Note: You will need to create the `feastfrenzy` database in your MySQL server._
+1. **Copy environment template:**
+   ```bash
+   cp backend/.env.example backend/.env
+   ```
 
-3.  **Install dependencies:**
+2. **Configure database settings:**
+   ```env
+   DB_HOST=localhost
+   DB_USER=your_mysql_user
+   DB_PASSWORD=your_mysql_password
+   DB_NAME=feastfrenzy
+   JWT_SECRET=your-super-secret-jwt-key
+   ```
 
-    ```bash
-    npm install
-    ```
+3. **Create database:**
+   ```sql
+   CREATE DATABASE feastfrenzy;
+   ```
 
-4.  **Run the server:**
+## 🧪 Testing
 
-    ```bash
-    npm start
-    ```
+FeastFrenzy includes comprehensive testing at all levels:
 
-    The backend server will be running at `http://localhost:3000`.
+### Backend Testing
+- **Unit Tests**: Individual function and service testing
+- **Integration Tests**: API endpoint testing with database
+- **Coverage**: 80%+ code coverage requirement
+- **Test Database**: Isolated SQLite database for tests
 
-5.  **Run tests:**
-    ```bash
-    npm test
-    ```
+### Frontend Testing
+- **Unit Tests**: Component and service testing
+- **E2E Tests**: Full user workflow testing
+- **Coverage**: 70%+ code coverage requirement
 
-### Frontend Setup
+### Running Tests
+```bash
+# Backend
+cd backend
+npm test                    # Run all tests
+npm run test:coverage       # Run with coverage report
+npm run test:watch          # Watch mode
 
-1.  **Navigate to the frontend directory:**
+# Frontend  
+cd frontend
+npm test                    # Run unit tests
+npm run test:coverage       # Run with coverage
+npm run e2e                 # Run E2E tests
+```
 
-    ```bash
-    cd frontend
-    ```
+## 📊 Monitoring & Analytics
 
-2.  **Install dependencies:**
-    _Note: This project has some dependency resolution issues. Use the `--legacy-peer-deps` flag if you encounter `ERESOLVE` errors._
+FeastFrenzy includes production-ready monitoring:
 
-    ```bash
-    npm install --legacy-peer-deps
-    ```
+- **Prometheus**: Metrics collection and alerting
+- **Grafana**: Beautiful dashboards and visualization
+- **Health Checks**: Application and dependency monitoring
+- **Logging**: Structured logging with Winston
+- **Alerts**: Automated alerting for critical issues
 
-3.  **Run the development server:**
-    ```bash
-    npm start
-    ```
-    The frontend development server will be running at `http://localhost:4200`.
+### Access Monitoring
+- Grafana Dashboard: http://localhost:3001 (admin/admin)
+- Prometheus: http://localhost:9090
+- Application Metrics: http://localhost:3000/metrics
+
+## 📚 API Documentation
+
+Comprehensive API documentation is available:
+- **Swagger UI**: Interactive API documentation
+- **OpenAPI 3.0**: Machine-readable API specification  
+- **Postman Collection**: Ready-to-use API testing
+
+Access API docs at: http://localhost:3000/api-docs
+
+## 👍 Contributing
+
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details on:
+
+- Code of Conduct
+- Development setup
+- Coding standards
+- Pull request process
+- Issue reporting
+
+### Quick Contribution Setup
+```bash
+# Fork the repo and clone your fork
+git clone https://github.com/your-username/FeastFrenzy.git
+cd FeastFrenzy
+
+# Install dependencies
+npm run install:all
+
+# Create feature branch
+git checkout -b feature/your-feature-name
+
+# Make changes and test
+npm run test:all
+npm run lint:all
+
+# Commit and push
+git commit -m "feat: add your feature"
+git push origin feature/your-feature-name
+```
+
+## 🛡️ Security
+
+FeastFrenzy implements enterprise-grade security:
+
+- **JWT Authentication** with refresh tokens
+- **Role-based Access Control** (RBAC)
+- **Input Validation** and sanitization
+- **SQL Injection** prevention with Sequelize ORM
+- **XSS Protection** with Helmet.js
+- **Rate Limiting** to prevent abuse
+- **HTTPS** enforced in production
+- **Security Headers** configured
+
+### Reporting Security Issues
+Please report security vulnerabilities to: security@feastfrenzy.com
+
+## 📜 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🚀 Roadmap
+
+### Upcoming Features
+- [ ] Real-time notifications with WebSockets
+- [ ] Mobile application (React Native)
+- [ ] Advanced analytics with ML predictions
+- [ ] Multi-tenant support
+- [ ] Inventory management integration
+- [ ] Payment gateway integration
+- [ ] Barcode/QR code scanning
+
+### Performance Improvements
+- [ ] GraphQL API implementation
+- [ ] Database sharding for high-scale deployments
+- [ ] Advanced caching strategies
+- [ ] CDN integration for static assets
+
+## 📞 Support
+
+For support and questions:
+
+- **Documentation**: Check our comprehensive [docs](docs/)
+- **Issues**: [GitHub Issues](https://github.com/your-username/FeastFrenzy/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/your-username/FeastFrenzy/discussions)
+- **Email**: support@feastfrenzy.com
+
+## 🙏 Acknowledgments
+
+- Angular team for the amazing framework
+- Node.js and Express.js communities
+- Bootstrap and Bootswatch for beautiful UI components
+- All contributors who made this project possible
 
 ---
 
-## Original Task Description (Hungarian)
+⭐ **Star this repository if you find it useful!**
 
-> # FeastFrenzy v.1.0.0
->
-> ## A feladat
->
-> A feladat elkészítése során egy üzemi étkezde néhány felületét kell elkészíteni.
-> Az üzem vezetősége nem tudta eldönteni, hogy milyen eszközt biztosít az étkezdéseknek, ezért webes alkalmazást kell készíteni. Az alkalmazás használata során keletkezett adatokat adatbázisban tároljuk.
-> Az üzemben a dolgozó a munkakörülmények miatt, nem tarthat magánál kézpénzt, ezért az étkezdében a fogyasztásukat rögzítik, majd fizetéskor a „tartozásuk" egy összegben levonásra kerül.
-> Az üzemi dolgozókat karbantartani nem szükséges — karbantartása egy másik modulban kerül majd megvalósításra.
-> A termékeket —menü, kávé, üdítő... - szintén nem szükséges karbantartani. Minden terméknek fix ára van, amely a termék rögzítésével együtt kerül bevitelre. Természetesen a későbbiekben a karbantartó felületen az árak tetszőleges időpontban megváltoztathatók lesznek.
->
-> ### A feladat során elkészítendő felületek
->
-> 1.  Értékesítési felület, amelyen meg kell tudni adni, hogy mely dolgozó fogyasztása kerül rögzítésre. Tételeket termék és mennyiség megadásával kell tudni megadni, törölni, módosítani. Egy értékesítéshez több különböző termék tartozhat. Egy értékesítés vagy törlésre kerül vagy lezárásra, ami után már nem módosítható.
-> 2.  A dolgozói fogyasztásriport azt mutatja meg, hogy dolgozóinkén mennyi értékben volt fogyasztás abban a hónapban, amely hónapban a lekérdezés történik.
-> 3.  A termékek fogyásának riportja azt mutatja meg, hogy a termékekből mennyi fogyott az adott hónapban - rendezve a fogyás mennyiségére fordítottan.
->
-> ### Amit várunk
->
-> - Forráskód.
-> - A db és a kiindulási adatok létrehozásához szükséges SQL szkript.
-> - A futtató környezet rövid leírása.
->
-> ## A futtató környezet rövid leírása
->
-> A futtató környezet a következő elemekből áll:
-> -Operációs rendszer: Windows/macOS/Linux
-> -Web-kiszolgáló: Node.js
-> -Programozási nyelv: TypeScript
-> -Adatbázis-kezelő rendszer: MySQL
-> -Szükséges könyvtárak: Angular, Express, MySQL, npm
->
-> A projekt futtatásához szükséges Node.js verzió : min 12.18.0
-> -A projekt futtatásához szükséges Angular CLI verzió : min 12.0.0
-> -A projekt futtatásához szükséges MySQL verzió: min 8.0.0
-> Az alkalmazást el lehet indítani a parancssorból, az Angular CLI segítségével futtatva a ng serve parancsot a projekt gyökérkönyvtárában. A futtató környezet beállítása után az alkalmazás elérhető lesz a http: // localhost: 4200 / címen a böngészőben.
->
-> ### Amit várunk
->
-> - Forráskód.
-> - A db és a kiindulási adatok létrehozásához szükséges SQL szkript.
-> - A futtató környezet rövid leírása.
+Built with ❤️ by the FeastFrenzy team

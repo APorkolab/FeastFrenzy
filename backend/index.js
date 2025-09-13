@@ -14,5 +14,5 @@ const port = process.env.PORT || 3000;
 // });
 
 app.listen(port, () => {
-    logger.info(`App listening at http://localhost:${port}`);
+  logger.info(`App listening at http://localhost:${port}`);
 });

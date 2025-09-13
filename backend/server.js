@@ -3,7 +3,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const logger = require('./logger/logger');
 const httpErrors = require('http-errors');
-require("dotenv").config();
+require('dotenv').config();
 
 const app = express();
 
@@ -21,22 +21,22 @@ app.use('/purchases', require('./controller/purchase/router'));
 app.use('/purchase-items', require('./controller/purchase-item/router'));
 
 app.get('/health', (req, res) => {
-    res.status(200).send('OK');
+  res.status(200).send('OK');
 });
 
 // 404 Handler
 app.use((req, res, next) => {
-    next(httpErrors(404, 'Not found'));
+  next(httpErrors(404, 'Not found'));
 });
 
 // Error Handler
 app.use((err, req, res, next) => {
-    res.status(err.status || 500);
-    res.json({
-        error: {
-            message: err.message,
-        },
-    });
+  res.status(err.status || 500);
+  res.json({
+    error: {
+      message: err.message,
+    },
+  });
 });
 
 module.exports = app;
