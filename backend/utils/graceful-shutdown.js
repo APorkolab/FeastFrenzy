@@ -10,7 +10,7 @@ class GracefulShutdown {
     this.shutdownHandlers = [];
     this.isShuttingDown = false;
     this.shutdownTimeout = process.env.SHUTDOWN_TIMEOUT || 30000; // 30 seconds
-    
+
     this.setupSignalHandlers();
   }
 
@@ -26,7 +26,7 @@ class GracefulShutdown {
       handler,
       timeout,
     });
-    
+
     logger.debug(`Registered shutdown handler: ${name}`);
   }
 
@@ -36,7 +36,7 @@ class GracefulShutdown {
   setupSignalHandlers() {
     // Handle termination signals
     const signals = ['SIGTERM', 'SIGINT', 'SIGUSR2'];
-    
+
     signals.forEach(signal => {
       process.on(signal, () => {
         logger.info(`Received ${signal}, initiating graceful shutdown...`);
@@ -80,7 +80,7 @@ class GracefulShutdown {
     try {
       // Execute all shutdown handlers
       await this.executeShutdownHandlers();
-      
+
       logger.info('Graceful shutdown completed successfully');
       clearTimeout(forceExitTimeout);
       process.exit(exitCode);
@@ -100,15 +100,15 @@ class GracefulShutdown {
     // Execute handlers in parallel with individual timeouts
     const shutdownPromises = this.shutdownHandlers.map(async ({ name, handler, timeout }) => {
       logger.debug(`Executing shutdown handler: ${name}`);
-      
+
       try {
         await Promise.race([
           handler(),
-          new Promise((_, reject) => 
-            setTimeout(() => reject(new Error(`Handler ${name} timed out`)), timeout)
-          )
+          new Promise((_, reject) =>
+            setTimeout(() => reject(new Error(`Handler ${name} timed out`)), timeout),
+          ),
         ]);
-        
+
         logger.debug(`Shutdown handler ${name} completed successfully`);
       } catch (error) {
         logger.error(`Error in shutdown handler ${name}`, { error });
@@ -236,7 +236,7 @@ const commonHandlers = {
   cancelJobs: (jobs = []) => {
     gracefulShutdown.register('scheduled-jobs', async () => {
       logger.info(`Cancelling ${jobs.length} scheduled jobs...`);
-      
+
       for (const job of jobs) {
         try {
           if (job && typeof job.cancel === 'function') {
@@ -248,7 +248,7 @@ const commonHandlers = {
           logger.error('Error cancelling job', { error, job });
         }
       }
-      
+
       logger.info('Scheduled jobs cancelled');
     }, 1000); // 1 second timeout
   },
@@ -260,10 +260,10 @@ const commonHandlers = {
   waitForOngoingRequests: (maxWaitTime = 5000) => {
     gracefulShutdown.register('ongoing-requests', async () => {
       logger.info('Waiting for ongoing requests to complete...');
-      
+
       // This would need to be implemented based on your request tracking
       // For example, you could track active request counts
-      
+
       await new Promise(resolve => setTimeout(resolve, Math.min(maxWaitTime, 2000)));
       logger.info('Ongoing requests handling completed');
     }, maxWaitTime + 1000);

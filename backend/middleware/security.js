@@ -63,7 +63,7 @@ const slowDownConfig = slowDown({
 const corsConfig = {
   origin: (origin, callback) => {
     // Allow requests with no origin (mobile apps, Postman, etc.)
-    if (!origin) return callback(null, true);
+    if (!origin) {return callback(null, true);}
 
     const allowedOrigins = [
       'http://localhost:4200',
@@ -169,11 +169,11 @@ const createSecurityMiddleware = () => {
   middleware.push((req, res, next) => {
     // Remove server information
     res.removeHeader('X-Powered-By');
-    
+
     // Add custom security headers
     res.setHeader('X-API-Version', '1.0');
     res.setHeader('X-Request-ID', req.id || 'unknown');
-    
+
     // Prevent caching of sensitive endpoints
     if (req.path.includes('/auth') || req.path.includes('/api')) {
       res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
@@ -202,12 +202,12 @@ module.exports = {
 
   // Utility functions
   createCustomRateLimit: (options) => rateLimit({ ...rateLimitConfig.general, ...options }),
-  
+
   // Security validation middleware
   validateApiKey: (req, res, next) => {
     const apiKey = req.headers['x-api-key'];
     const validApiKeys = process.env.API_KEYS?.split(',') || [];
-    
+
     if (process.env.NODE_ENV === 'production' && validApiKeys.length > 0) {
       if (!apiKey || !validApiKeys.includes(apiKey)) {
         return res.status(401).json({

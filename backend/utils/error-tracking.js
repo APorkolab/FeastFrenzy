@@ -16,7 +16,7 @@ class ErrorTracker {
       errorRate: 0.05, // 5% error rate threshold
       responseTime: 5000, // 5 second response time threshold
       criticalErrorCount: 10, // 10 critical errors in time window
-      timeWindow: 300000 // 5 minutes in milliseconds
+      timeWindow: 300000, // 5 minutes in milliseconds
     };
   }
 
@@ -43,11 +43,11 @@ class ErrorTracker {
       Sentry.init({
         dsn,
         environment: this.environment,
-        
+
         // Performance monitoring
         tracesSampleRate: this.environment === 'production' ? 0.1 : 1.0,
         profilesSampleRate: this.environment === 'production' ? 0.1 : 1.0,
-        
+
         // Integrations
         integrations: [
           new Sentry.Integrations.Http({ tracing: true }),
@@ -55,71 +55,71 @@ class ErrorTracker {
           new Sentry.Integrations.RequestData({
             include: {
               request: ['url', 'method', 'headers', 'query_string'],
-              user: ['id', 'email', 'username']
-            }
+              user: ['id', 'email', 'username'],
+            },
           }),
           new ProfilingIntegration(),
         ],
-        
+
         // Filtering
         beforeSend: (event, hint) => {
           return this.filterEvent(event, hint);
         },
-        
+
         beforeSendTransaction: (event) => {
           return this.filterTransaction(event);
         },
-        
+
         // Error filtering
         ignoreErrors: [
           // Ignore common browser errors
           'ResizeObserver loop limit exceeded',
           'Non-Error promise rejection captured',
-          
+
           // Ignore network errors that aren't actionable
           'NetworkError',
           'fetch',
-          
+
           // Ignore validation errors (these should be handled gracefully)
           /ValidationError/,
           /CastError/,
         ],
-        
+
         // Release tracking
         release: process.env.npm_package_version || process.env.VERSION || 'unknown',
-        
+
         // Additional options
         maxBreadcrumbs: 100,
         attachStacktrace: true,
         sendDefaultPii: false, // Don't send personally identifiable information
-        
+
         // Server name
         serverName: process.env.SERVER_NAME || require('os').hostname(),
-        
+
         // Tags
         initialScope: {
           tags: {
             component: 'backend',
-            service: 'feastfrenzy-api'
+            service: 'feastfrenzy-api',
           },
           extra: {
             nodeVersion: process.version,
             platform: process.platform,
-            arch: process.arch
-          }
-        }
+            arch: process.arch,
+          },
+        },
       });
 
       // Set up global error handlers
       this.setupGlobalErrorHandlers();
-      
+
       // Set up custom alert rules
       this.setupAlertRules();
 
       this.initialized = true;
       logger.info('Error tracking initialized successfully', {
         environment: this.environment,
-        dsn: dsn ? dsn.substring(0, 50) + '...' : 'none'
+        dsn: dsn ? `${dsn.substring(0, 50) }...` : 'none',
       });
 
     } catch (error) {
@@ -148,7 +148,7 @@ class ErrorTracker {
         if (this.environment === 'production') {
           return true;
         }
-        
+
         return error.status >= 400 || !error.status;
       },
     });
@@ -170,28 +170,28 @@ class ErrorTracker {
       if (context.user) {
         scope.setUser(context.user);
       }
-      
+
       if (context.tags) {
         Object.entries(context.tags).forEach(([key, value]) => {
           scope.setTag(key, value);
         });
       }
-      
+
       if (context.extra) {
         Object.entries(context.extra).forEach(([key, value]) => {
           scope.setExtra(key, value);
         });
       }
-      
+
       if (context.level) {
         scope.setLevel(context.level);
       }
-      
+
       // Set fingerprint for grouping
       if (context.fingerprint) {
         scope.setFingerprint(context.fingerprint);
       }
-      
+
       return Sentry.captureException(error);
     });
   }
@@ -209,19 +209,19 @@ class ErrorTracker {
       if (context.user) {
         scope.setUser(context.user);
       }
-      
+
       if (context.tags) {
         Object.entries(context.tags).forEach(([key, value]) => {
           scope.setTag(key, value);
         });
       }
-      
+
       if (context.extra) {
         Object.entries(context.extra).forEach(([key, value]) => {
           scope.setExtra(key, value);
         });
       }
-      
+
       return Sentry.captureMessage(message, level);
     });
   }
@@ -236,7 +236,7 @@ class ErrorTracker {
 
     Sentry.addBreadcrumb({
       timestamp: Date.now() / 1000,
-      ...breadcrumb
+      ...breadcrumb,
     });
   }
 
@@ -296,17 +296,17 @@ class ErrorTracker {
     // Filter out low-priority errors in production
     if (this.environment === 'production') {
       const error = hint.originalException;
-      
+
       // Skip validation errors
       if (error && error.name === 'ValidationError') {
         return null;
       }
-      
+
       // Skip 404 errors
       if (error && error.status === 404) {
         return null;
       }
-      
+
       // Skip rate limit errors
       if (error && error.status === 429) {
         return null;
@@ -351,23 +351,23 @@ class ErrorTracker {
     // Handle unhandled promise rejections
     process.on('unhandledRejection', (reason, promise) => {
       logger.error('Unhandled Promise Rejection', { reason, promise });
-      
+
       this.captureException(new Error(`Unhandled Promise Rejection: ${reason}`), {
         tags: { errorType: 'unhandledRejection' },
         extra: { promise: promise.toString() },
-        level: 'error'
+        level: 'error',
       });
     });
 
     // Handle uncaught exceptions
     process.on('uncaughtException', (error) => {
       logger.error('Uncaught Exception', { error });
-      
+
       this.captureException(error, {
         tags: { errorType: 'uncaughtException' },
-        level: 'fatal'
+        level: 'fatal',
       });
-      
+
       // Don't exit immediately in production, let graceful shutdown handle it
       if (this.environment !== 'production') {
         process.exit(1);
@@ -385,7 +385,7 @@ class ErrorTracker {
       condition: (metrics) => metrics.errorRate > this.incidentThresholds.errorRate,
       severity: 'warning',
       cooldown: 900000, // 15 minutes
-      lastTriggered: 0
+      lastTriggered: 0,
     });
 
     // Critical error burst alert
@@ -394,7 +394,7 @@ class ErrorTracker {
       condition: (metrics) => metrics.criticalErrors > this.incidentThresholds.criticalErrorCount,
       severity: 'critical',
       cooldown: 300000, // 5 minutes
-      lastTriggered: 0
+      lastTriggered: 0,
     });
 
     // High response time alert
@@ -403,7 +403,7 @@ class ErrorTracker {
       condition: (metrics) => metrics.avgResponseTime > this.incidentThresholds.responseTime,
       severity: 'warning',
       cooldown: 1800000, // 30 minutes
-      lastTriggered: 0
+      lastTriggered: 0,
     });
   }
 
@@ -438,7 +438,7 @@ class ErrorTracker {
     logger.warn(`Alert triggered: ${rule.name}`, {
       alertRule: ruleId,
       severity: rule.severity,
-      metrics
+      metrics,
     });
 
     // Send to Sentry
@@ -446,15 +446,15 @@ class ErrorTracker {
       tags: {
         alertType: 'automated',
         alertRule: ruleId,
-        severity: rule.severity
+        severity: rule.severity,
       },
       extra: {
         metrics,
         rule: {
           name: rule.name,
-          condition: rule.condition.toString()
-        }
-      }
+          condition: rule.condition.toString(),
+        },
+      },
     });
 
     // Trigger incident response if critical
@@ -470,7 +470,7 @@ class ErrorTracker {
     logger.error(`Critical incident detected: ${rule.name}`, {
       alertRule: ruleId,
       metrics,
-      action: 'incident_response_triggered'
+      action: 'incident_response_triggered',
     });
 
     // Create incident in Sentry
@@ -478,7 +478,7 @@ class ErrorTracker {
       tags: {
         incident: 'true',
         severity: 'critical',
-        alertRule: ruleId
+        alertRule: ruleId,
       },
       extra: {
         incidentMetrics: metrics,
@@ -486,16 +486,16 @@ class ErrorTracker {
           'Check system health',
           'Review recent deployments',
           'Scale up resources if needed',
-          'Contact on-call engineer'
-        ]
+          'Contact on-call engineer',
+        ],
       },
       level: 'fatal',
-      fingerprint: [`incident-${ruleId}`]
+      fingerprint: [`incident-${ruleId}`],
     });
 
     // In a real system, this would trigger:
     // - PagerDuty/Opsgenie alerts
-    // - Slack/Teams notifications  
+    // - Slack/Teams notifications
     // - Automated scaling
     // - Circuit breaker activation
   }
@@ -507,14 +507,14 @@ class ErrorTracker {
     if (!this.initialized) {
       return {
         status: 'disabled',
-        message: 'Error tracking not initialized'
+        message: 'Error tracking not initialized',
       };
     }
 
     try {
       // Test connectivity by sending a test event
       const testEventId = Sentry.captureMessage('Health check test', 'debug');
-      
+
       return {
         status: 'healthy',
         message: 'Error tracking operational',
@@ -522,14 +522,14 @@ class ErrorTracker {
           environment: this.environment,
           initialized: this.initialized,
           testEventId,
-          alertRules: this.alertRules.size
-        }
+          alertRules: this.alertRules.size,
+        },
       };
     } catch (error) {
       return {
         status: 'unhealthy',
         message: 'Error tracking connection failed',
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -579,16 +579,16 @@ const errorTracker = new ErrorTracker();
 const setupErrorTracking = (app) => {
   errorTracker.initialize();
   const { requestHandler, errorHandler } = errorTracker.setupExpressMiddleware(app);
-  
+
   return {
     requestHandler,
     errorHandler,
-    errorTracker
+    errorTracker,
   };
 };
 
 module.exports = {
   errorTracker,
   setupErrorTracking,
-  ErrorTracker
+  ErrorTracker,
 };

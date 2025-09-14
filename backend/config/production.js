@@ -52,7 +52,7 @@ module.exports = {
       origin: [
         'https://feastfrenzy.com',
         'https://app.feastfrenzy.com',
-        'https://admin.feastfrenzy.com'
+        'https://admin.feastfrenzy.com',
       ],
       credentials: true,
       optionsSuccessStatus: 200,

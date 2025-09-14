@@ -16,7 +16,7 @@ class HealthCheckService {
     this.startTime = Date.now();
     this.customChecks = new Map();
     this.lastHealthCheckResults = new Map();
-    
+
     // Cache health check results for a short period to prevent excessive checks
     this.cacheTimeout = 30000; // 30 seconds
     this.cachedResults = new Map();
@@ -34,7 +34,7 @@ class HealthCheckService {
       check: checkFunction,
       timeout,
     });
-    
+
     logger.debug(`Registered health check: ${name}`);
   }
 
@@ -46,7 +46,7 @@ class HealthCheckService {
     this.customChecks.delete(name);
     this.lastHealthCheckResults.delete(name);
     this.cachedResults.delete(name);
-    
+
     logger.debug(`Unregistered health check: ${name}`);
   }
 
@@ -133,7 +133,7 @@ class HealthCheckService {
         }
 
         const startTime = Date.now();
-        
+
         try {
           const result = await Promise.race([
             check(),
@@ -173,7 +173,7 @@ class HealthCheckService {
           logger.error(`Health check ${name} failed`, { error });
           return healthResult;
         }
-      }
+      },
     );
 
     return Promise.all(checkPromises);
@@ -289,7 +289,7 @@ class HealthCheckService {
       // Use 'df' command to get disk usage (Unix-like systems)
       const { stdout } = await execFileAsync('df', ['-h', '/']);
       const lines = stdout.trim().split('\n');
-      
+
       if (lines.length > 1) {
         const parts = lines[1].split(/\s+/);
         return {
@@ -544,7 +544,7 @@ const commonChecks = {
       });
 
       const healthy = response.status >= 200 && response.status < 400;
-      
+
       return {
         healthy,
         details: {
@@ -569,7 +569,7 @@ const commonChecks = {
     try {
       await fs.access(path);
       const stats = await fs.stat(path);
-      
+
       return {
         healthy: true,
         details: {
@@ -596,7 +596,7 @@ const commonChecks = {
     const totalMemory = os.totalmem();
     const usedMemory = memoryUsage.rss;
     const usage = usedMemory / totalMemory;
-    
+
     return {
       healthy: usage < threshold,
       details: {

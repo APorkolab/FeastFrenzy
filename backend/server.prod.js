@@ -1,6 +1,6 @@
 /**
  * Production-Ready FeastFrenzy Backend Server
- * 
+ *
  * This server includes all production-ready features:
  * - Graceful shutdown handling
  * - Health checks for load balancers
@@ -42,7 +42,7 @@ async function initializeServer() {
 
     // Apply security middleware first
     app.use(securityMiddleware());
-    
+
     // Performance monitoring
     app.use(performanceMiddleware);
 
@@ -72,7 +72,7 @@ async function initializeServer() {
     // Request logging middleware
     app.use((req, res, next) => {
       const startTime = Date.now();
-      
+
       res.on('finish', () => {
         const duration = Date.now() - startTime;
         logger.info('HTTP Request', {
@@ -116,12 +116,12 @@ async function initializeServer() {
 
     // 404 handler
     app.use('*', (req, res) => {
-      logger.warn('Route not found', { 
-        method: req.method, 
+      logger.warn('Route not found', {
+        method: req.method,
         url: req.originalUrl,
         ip: req.ip,
       });
-      
+
       res.status(404).json({
         success: false,
         error: {
@@ -179,7 +179,7 @@ async function initializeServer() {
 
     // Configure server for production
     server.keepAliveTimeout = 65000; // Slightly higher than ALB timeout
-    server.headersTimeout = 66000;   // Slightly higher than keepAliveTimeout
+    server.headersTimeout = 66000; // Slightly higher than keepAliveTimeout
 
     // Handle server errors
     server.on('error', (error) => {
@@ -190,7 +190,7 @@ async function initializeServer() {
     // Handle client errors (like malformed requests)
     server.on('clientError', (error, socket) => {
       logger.warn('Client error', { error: error.message });
-      
+
       if (!socket.writableEnded) {
         socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
       }
@@ -212,21 +212,21 @@ function setupHealthChecks() {
   healthCheckService.register(
     'database',
     commonChecks.database(sequelize),
-    5000
+    5000,
   );
 
   // Memory usage check
   healthCheckService.register(
     'memory',
     commonChecks.memoryUsage(0.9), // Alert if memory usage > 90%
-    1000
+    1000,
   );
 
   // File system check for critical directories
   healthCheckService.register(
     'filesystem',
     commonChecks.fileSystem('./logs'),
-    2000
+    2000,
   );
 
   logger.info('Health checks registered successfully');
@@ -246,12 +246,12 @@ function setupGracefulShutdown() {
   // Custom cleanup handler
   gracefulShutdown.register('cleanup', async () => {
     logger.info('Performing final cleanup...');
-    
+
     // Clear any intervals or timeouts
     // Cancel any ongoing operations
     // Close file handles
     // etc.
-    
+
     logger.info('Cleanup completed');
   }, 3000);
 

@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 module.exports = {
   async up(queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction();
-    
+
     try {
       // Seed Employees (including admin users)
       const hashedPassword = await bcrypt.hash('Password123', 12);
@@ -27,7 +27,7 @@ module.exports = {
           isActive: true,
           hireDate: new Date('2020-01-01'),
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: 2,
@@ -41,9 +41,9 @@ module.exports = {
           isActive: true,
           hireDate: new Date('2020-06-01'),
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
-        
+
         // Regular employees for different departments
         {
           id: 3,
@@ -57,7 +57,7 @@ module.exports = {
           isActive: true,
           hireDate: new Date('2021-03-15'),
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: 4,
@@ -71,7 +71,7 @@ module.exports = {
           isActive: true,
           hireDate: new Date('2021-04-01'),
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: 5,
@@ -85,7 +85,7 @@ module.exports = {
           isActive: true,
           hireDate: new Date('2021-07-10'),
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: 6,
@@ -99,7 +99,7 @@ module.exports = {
           isActive: true,
           hireDate: new Date('2021-09-05'),
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: 7,
@@ -113,7 +113,7 @@ module.exports = {
           isActive: true,
           hireDate: new Date('2022-01-12'),
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: 8,
@@ -127,7 +127,7 @@ module.exports = {
           isActive: true,
           hireDate: new Date('2022-03-20'),
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: 9,
@@ -141,7 +141,7 @@ module.exports = {
           isActive: true,
           hireDate: new Date('2022-05-15'),
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: 10,
@@ -155,9 +155,9 @@ module.exports = {
           isActive: true,
           hireDate: new Date('2022-08-01'),
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
-        
+
         // Inactive employee for testing
         {
           id: 11,
@@ -171,8 +171,8 @@ module.exports = {
           isActive: false,
           hireDate: new Date('2021-01-01'),
           createdAt: new Date(),
-          updatedAt: new Date()
-        }
+          updatedAt: new Date(),
+        },
       ];
 
       await queryInterface.bulkInsert('Employees', employees, { transaction });
@@ -190,7 +190,7 @@ module.exports = {
           stock: 100,
           imageUrl: 'https://example.com/images/coffee.jpg',
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: 2,
@@ -202,7 +202,7 @@ module.exports = {
           stock: 80,
           imageUrl: 'https://example.com/images/tea.jpg',
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: 3,
@@ -214,7 +214,7 @@ module.exports = {
           stock: 50,
           imageUrl: 'https://example.com/images/orange-juice.jpg',
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: 4,
@@ -226,7 +226,7 @@ module.exports = {
           stock: 200,
           imageUrl: 'https://example.com/images/water.jpg',
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: 5,
@@ -238,7 +238,7 @@ module.exports = {
           stock: 120,
           imageUrl: 'https://example.com/images/soda.jpg',
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
 
         // Food Items
@@ -252,7 +252,7 @@ module.exports = {
           stock: 25,
           imageUrl: 'https://example.com/images/turkey-sandwich.jpg',
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: 7,
@@ -264,7 +264,7 @@ module.exports = {
           stock: 20,
           imageUrl: 'https://example.com/images/caesar-salad.jpg',
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: 8,
@@ -276,7 +276,7 @@ module.exports = {
           stock: 30,
           imageUrl: 'https://example.com/images/veggie-wrap.jpg',
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: 9,
@@ -288,7 +288,7 @@ module.exports = {
           stock: 40,
           imageUrl: 'https://example.com/images/pizza-slice.jpg',
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: 10,
@@ -300,7 +300,7 @@ module.exports = {
           stock: 15,
           imageUrl: 'https://example.com/images/soup.jpg',
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
 
         // Snacks
@@ -314,7 +314,7 @@ module.exports = {
           stock: 60,
           imageUrl: 'https://example.com/images/mixed-nuts.jpg',
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: 12,
@@ -326,7 +326,7 @@ module.exports = {
           stock: 90,
           imageUrl: 'https://example.com/images/granola-bar.jpg',
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: 13,
@@ -338,7 +338,7 @@ module.exports = {
           stock: 35,
           imageUrl: 'https://example.com/images/fruit-cup.jpg',
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: 14,
@@ -350,7 +350,7 @@ module.exports = {
           stock: 25,
           imageUrl: 'https://example.com/images/yogurt-parfait.jpg',
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: 15,
@@ -362,7 +362,7 @@ module.exports = {
           stock: 100,
           imageUrl: 'https://example.com/images/chips.jpg',
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
 
         // Desserts
@@ -376,7 +376,7 @@ module.exports = {
           stock: 50,
           imageUrl: 'https://example.com/images/chocolate-cookie.jpg',
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: 17,
@@ -388,7 +388,7 @@ module.exports = {
           stock: 20,
           imageUrl: 'https://example.com/images/apple-pie.jpg',
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: 18,
@@ -400,7 +400,7 @@ module.exports = {
           stock: 30,
           imageUrl: 'https://example.com/images/ice-cream.jpg',
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
 
         // Out of stock item for testing
@@ -414,8 +414,8 @@ module.exports = {
           stock: 0,
           imageUrl: 'https://example.com/images/special-sandwich.jpg',
           createdAt: new Date(),
-          updatedAt: new Date()
-        }
+          updatedAt: new Date(),
+        },
       ];
 
       await queryInterface.bulkInsert('Products', products, { transaction });
@@ -430,7 +430,7 @@ module.exports = {
           paymentMethod: 'balance',
           notes: 'Lunch order',
           createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
-          updatedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+          updatedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
         },
         {
           id: 2,
@@ -440,7 +440,7 @@ module.exports = {
           paymentMethod: 'balance',
           notes: 'Quick lunch',
           createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
-          updatedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)
+          updatedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
         },
         {
           id: 3,
@@ -450,7 +450,7 @@ module.exports = {
           paymentMethod: 'balance',
           notes: 'Afternoon snack',
           createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
-          updatedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000)
+          updatedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
         },
         {
           id: 4,
@@ -460,7 +460,7 @@ module.exports = {
           paymentMethod: 'balance',
           notes: 'Team lunch',
           createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
-          updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
+          updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
         },
         {
           id: 5,
@@ -470,8 +470,8 @@ module.exports = {
           paymentMethod: 'balance',
           notes: 'Healthy snack',
           createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
-          updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000)
-        }
+          updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+        },
       ];
 
       await queryInterface.bulkInsert('Purchases', purchases, { transaction });
@@ -487,7 +487,7 @@ module.exports = {
           unitPrice: 6.50,
           subtotal: 6.50,
           createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-          updatedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+          updatedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
         },
         {
           id: 2,
@@ -497,7 +497,7 @@ module.exports = {
           unitPrice: 2.00, // Different price at time of purchase
           subtotal: 2.00,
           createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-          updatedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+          updatedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
         },
 
         // Purchase 2 items (Bob Smith - $6.50)
@@ -509,7 +509,7 @@ module.exports = {
           unitPrice: 6.50,
           subtotal: 6.50,
           createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-          updatedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)
+          updatedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
         },
 
         // Purchase 3 items (Carol Davis - $4.50)
@@ -521,7 +521,7 @@ module.exports = {
           unitPrice: 4.50,
           subtotal: 4.50,
           createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-          updatedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000)
+          updatedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
         },
 
         // Purchase 4 items (David Wilson - $12.25)
@@ -533,7 +533,7 @@ module.exports = {
           unitPrice: 8.00,
           subtotal: 8.00,
           createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-          updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
+          updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
         },
         {
           id: 6,
@@ -543,7 +543,7 @@ module.exports = {
           unitPrice: 4.25,
           subtotal: 4.25,
           createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-          updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
+          updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
         },
 
         // Purchase 5 items (Emma Brown - $3.75)
@@ -555,15 +555,15 @@ module.exports = {
           unitPrice: 3.75,
           subtotal: 3.75,
           createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-          updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000)
-        }
+          updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+        },
       ];
 
       await queryInterface.bulkInsert('PurchaseItems', purchaseItems, { transaction });
 
       await transaction.commit();
       console.log('✅ Database seeded successfully with initial data');
-      
+
     } catch (error) {
       await transaction.rollback();
       console.error('❌ Error seeding database:', error);
@@ -573,21 +573,21 @@ module.exports = {
 
   async down(queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction();
-    
+
     try {
       // Delete in reverse order due to foreign key constraints
       await queryInterface.bulkDelete('PurchaseItems', null, { transaction });
       await queryInterface.bulkDelete('Purchases', null, { transaction });
       await queryInterface.bulkDelete('Products', null, { transaction });
       await queryInterface.bulkDelete('Employees', null, { transaction });
-      
+
       await transaction.commit();
       console.log('✅ Database unseeded successfully');
-      
+
     } catch (error) {
       await transaction.rollback();
       console.error('❌ Error unseeding database:', error);
       throw error;
     }
-  }
+  },
 };

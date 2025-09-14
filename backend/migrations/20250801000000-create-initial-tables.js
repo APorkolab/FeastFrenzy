@@ -9,34 +9,34 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       name: {
         type: Sequelize.STRING(100),
-        allowNull: false
+        allowNull: false,
       },
       email: {
         type: Sequelize.STRING(100),
         allowNull: false,
-        unique: true
+        unique: true,
       },
       department: {
         type: Sequelize.STRING(50),
-        allowNull: false
+        allowNull: false,
       },
       balance: {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: false,
-        defaultValue: 0
+        defaultValue: 0,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
 
     // Create Products table
@@ -45,38 +45,38 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       name: {
         type: Sequelize.STRING(100),
         allowNull: false,
-        unique: true
+        unique: true,
       },
       description: {
         type: Sequelize.TEXT,
-        allowNull: true
+        allowNull: true,
       },
       price: {
         type: Sequelize.DECIMAL(10, 2),
-        allowNull: false
+        allowNull: false,
       },
       category: {
         type: Sequelize.STRING(50),
-        allowNull: false
+        allowNull: false,
       },
       availability: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
-        defaultValue: true
+        defaultValue: true,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
 
     // Create Purchases table
@@ -85,41 +85,41 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       employeeId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
           model: 'Employees',
-          key: 'id'
+          key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT'
+        onDelete: 'RESTRICT',
       },
       totalAmount: {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: false,
-        defaultValue: 0
+        defaultValue: 0,
       },
       status: {
         type: Sequelize.ENUM('pending', 'completed', 'cancelled'),
         allowNull: false,
-        defaultValue: 'pending'
+        defaultValue: 'pending',
       },
       purchaseDate: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW
+        defaultValue: Sequelize.NOW,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
 
     // Create PurchaseItems table
@@ -128,79 +128,79 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       purchaseId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
           model: 'Purchases',
-          key: 'id'
+          key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       },
       productId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
           model: 'Products',
-          key: 'id'
+          key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT'
+        onDelete: 'RESTRICT',
       },
       quantity: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        defaultValue: 1
+        defaultValue: 1,
       },
       unitPrice: {
         type: Sequelize.DECIMAL(10, 2),
-        allowNull: false
+        allowNull: false,
       },
       totalPrice: {
         type: Sequelize.DECIMAL(10, 2),
-        allowNull: false
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
 
     // Create indexes for performance
     await queryInterface.addIndex('Employees', ['email'], {
       unique: true,
-      name: 'employees_email_unique'
+      name: 'employees_email_unique',
     });
 
     await queryInterface.addIndex('Employees', ['department'], {
-      name: 'employees_department_idx'
+      name: 'employees_department_idx',
     });
 
     await queryInterface.addIndex('Products', ['category', 'availability'], {
-      name: 'products_category_availability_idx'
+      name: 'products_category_availability_idx',
     });
 
     await queryInterface.addIndex('Purchases', ['employeeId', 'status'], {
-      name: 'purchases_employee_status_idx'
+      name: 'purchases_employee_status_idx',
     });
 
     await queryInterface.addIndex('Purchases', ['purchaseDate'], {
-      name: 'purchases_date_idx'
+      name: 'purchases_date_idx',
     });
 
     await queryInterface.addIndex('PurchaseItems', ['purchaseId'], {
-      name: 'purchase_items_purchase_idx'
+      name: 'purchase_items_purchase_idx',
     });
 
     await queryInterface.addIndex('PurchaseItems', ['productId'], {
-      name: 'purchase_items_product_idx'
+      name: 'purchase_items_product_idx',
     });
   },
 
@@ -210,5 +210,5 @@ module.exports = {
     await queryInterface.dropTable('Purchases');
     await queryInterface.dropTable('Products');
     await queryInterface.dropTable('Employees');
-  }
+  },
 };

@@ -110,7 +110,7 @@ module.exports = {
   // Performance configuration
   performance: {
     shutdownTimeout: 30000, // 30 seconds
-    requestTimeout: 30000,  // 30 seconds
+    requestTimeout: 30000, // 30 seconds
     compressionEnabled: false,
     cacheControl: {
       maxAge: 0,

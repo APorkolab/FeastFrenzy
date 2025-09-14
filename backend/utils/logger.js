@@ -8,7 +8,7 @@ const logFormat = winston.format.combine(
   }),
   winston.format.errors({ stack: true }),
   winston.format.json(),
-  winston.format.prettyPrint()
+  winston.format.prettyPrint(),
 );
 
 // Development format (more readable)
@@ -19,14 +19,14 @@ const devFormat = winston.format.combine(
   }),
   winston.format.printf(({ timestamp, level, message, ...metadata }) => {
     let msg = `${timestamp} [${level}]: ${message}`;
-    
+
     // Add metadata if present
     if (Object.keys(metadata).length > 0) {
-      msg += '\n' + JSON.stringify(metadata, null, 2);
+      msg += `\n${ JSON.stringify(metadata, null, 2)}`;
     }
-    
+
     return msg;
-  })
+  }),
 );
 
 // Create logs directory if it doesn't exist
@@ -47,7 +47,7 @@ transports.push(
     format: process.env.NODE_ENV === 'production' ? logFormat : devFormat,
     handleExceptions: true,
     handleRejections: true,
-  })
+  }),
 );
 
 // File transports (production and development)
@@ -62,7 +62,7 @@ if (process.env.NODE_ENV !== 'test') {
       maxFiles: 10,
       handleExceptions: true,
       handleRejections: true,
-    })
+    }),
   );
 
   // Error log
@@ -75,7 +75,7 @@ if (process.env.NODE_ENV !== 'test') {
       maxFiles: 10,
       handleExceptions: true,
       handleRejections: true,
-    })
+    }),
   );
 
   // Access log (HTTP requests)
@@ -86,7 +86,7 @@ if (process.env.NODE_ENV !== 'test') {
       format: logFormat,
       maxsize: 10485760, // 10MB
       maxFiles: 20,
-    })
+    }),
   );
 }
 
@@ -144,7 +144,7 @@ logger.api = (message, metadata = {}) => {
 logger.requestMiddleware = () => {
   return (req, res, next) => {
     const startTime = Date.now();
-    
+
     // Log request
     logger.api('Incoming request', {
       method: req.method,
@@ -158,7 +158,7 @@ logger.requestMiddleware = () => {
     res.on('finish', () => {
       const duration = Date.now() - startTime;
       const logLevel = res.statusCode >= 400 ? 'warn' : 'http';
-      
+
       logger[logLevel]('Request completed', {
         method: req.method,
         url: req.originalUrl,
@@ -224,7 +224,7 @@ if (process.env.NODE_ENV !== 'test') {
         stack: error.stack,
       },
     });
-    
+
     // Give logger time to write then exit
     setTimeout(() => process.exit(1), 1000);
   });

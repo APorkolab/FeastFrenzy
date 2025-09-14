@@ -20,14 +20,14 @@ class SecurityAuditor {
         low: 1,
         moderate: 2,
         high: 3,
-        critical: 4
+        critical: 4,
       },
       thresholds: {
         maxCritical: 0,
         maxHigh: 0,
         maxModerate: 5,
-        maxLow: 10
-      }
+        maxLow: 10,
+      },
     };
   }
 
@@ -36,7 +36,7 @@ class SecurityAuditor {
    */
   async runFullAudit() {
     logger.info('Starting comprehensive security audit...');
-    
+
     const auditResults = {
       timestamp: new Date().toISOString(),
       passed: true,
@@ -45,7 +45,7 @@ class SecurityAuditor {
         critical: [],
         high: [],
         moderate: [],
-        low: []
+        low: [],
       },
       checks: {
         dependencies: null,
@@ -57,9 +57,9 @@ class SecurityAuditor {
         inputValidation: null,
         rateLimiting: null,
         logging: null,
-        errorHandling: null
+        errorHandling: null,
       },
-      recommendations: []
+      recommendations: [],
     };
 
     try {
@@ -74,22 +74,22 @@ class SecurityAuditor {
         this.validateInputSanitization(),
         this.checkRateLimiting(),
         this.validateLogging(),
-        this.checkErrorHandling()
+        this.checkErrorHandling(),
       ]);
 
       // Process check results
       const checkNames = [
-        'dependencies', 'secrets', 'headers', 'cors', 
-        'authentication', 'authorization', 'inputValidation', 
-        'rateLimiting', 'logging', 'errorHandling'
+        'dependencies', 'secrets', 'headers', 'cors',
+        'authentication', 'authorization', 'inputValidation',
+        'rateLimiting', 'logging', 'errorHandling',
       ];
 
       checks.forEach((check, index) => {
         const checkName = checkNames[index];
-        
+
         if (check.status === 'fulfilled') {
           auditResults.checks[checkName] = check.value;
-          
+
           // Aggregate vulnerabilities
           if (check.value.vulnerabilities) {
             Object.keys(check.value.vulnerabilities).forEach(severity => {
@@ -106,7 +106,7 @@ class SecurityAuditor {
           auditResults.checks[checkName] = {
             passed: false,
             error: check.reason.message,
-            vulnerabilities: { critical: [], high: [], moderate: [], low: [] }
+            vulnerabilities: { critical: [], high: [], moderate: [], low: [] },
           };
           logger.error(`Security check ${checkName} failed`, { error: check.reason });
         }
@@ -124,7 +124,7 @@ class SecurityAuditor {
         critical: auditResults.vulnerabilities.critical.length,
         high: auditResults.vulnerabilities.high.length,
         moderate: auditResults.vulnerabilities.moderate.length,
-        low: auditResults.vulnerabilities.low.length
+        low: auditResults.vulnerabilities.low.length,
       });
 
       return auditResults;
@@ -142,18 +142,18 @@ class SecurityAuditor {
    */
   async checkDependencyVulnerabilities() {
     logger.debug('Checking dependency vulnerabilities...');
-    
+
     try {
       const { stdout } = await execFileAsync('npm', ['audit', '--json'], {
-        cwd: process.cwd()
+        cwd: process.cwd(),
       });
-      
+
       const auditData = JSON.parse(stdout);
       const vulnerabilities = {
         critical: [],
         high: [],
         moderate: [],
-        low: []
+        low: [],
       };
 
       // Parse npm audit results
@@ -167,7 +167,7 @@ class SecurityAuditor {
               range: vuln.range,
               via: vuln.via,
               fixAvailable: vuln.fixAvailable,
-              description: `${vuln.name}: ${vuln.range}`
+              description: `${vuln.name}: ${vuln.range}`,
             });
           }
         });
@@ -182,13 +182,13 @@ class SecurityAuditor {
         recommendations: totalVulnerabilities > 0 ? [
           'Run "npm audit fix" to automatically fix vulnerabilities',
           'Review and update dependencies regularly',
-          'Consider using tools like Snyk or Dependabot for continuous monitoring'
-        ] : []
+          'Consider using tools like Snyk or Dependabot for continuous monitoring',
+        ] : [],
       };
 
     } catch (error) {
       logger.warn('NPM audit failed, trying alternative method', { error: error.message });
-      
+
       // Fallback: check package.json for known vulnerable packages
       return this.checkKnownVulnerablePackages();
     }
@@ -199,27 +199,27 @@ class SecurityAuditor {
    */
   async scanForSecrets() {
     logger.debug('Scanning for hardcoded secrets...');
-    
+
     const secretPatterns = [
       { name: 'API Key', pattern: /api[_-]?key\s*[:=]\s*['""][^'""\s]{16,}['""]|[a-zA-Z0-9]{32,}/gi },
       { name: 'JWT Secret', pattern: /jwt[_-]?secret\s*[:=]\s*['""][^'""\s]{16,}['""]|eyJ[a-zA-Z0-9\-_]*/gi },
       { name: 'Database Password', pattern: /db[_-]?pass(?:word)?\s*[:=]\s*['""][^'""\s]+['""]|mysql:\/\/[^:\s]+:[^@\s]+@/gi },
       { name: 'Private Key', pattern: /-----BEGIN\s+(RSA\s+)?PRIVATE\s+KEY-----/gi },
       { name: 'AWS Access Key', pattern: /AKIA[0-9A-Z]{16}/gi },
-      { name: 'Generic Secret', pattern: /secret\s*[:=]\s*['""][^'""\s]{8,}['""]|password\s*[:=]\s*['""][^'""\s]{6,}['""](?!.*example|.*test|.*demo)/gi }
+      { name: 'Generic Secret', pattern: /secret\s*[:=]\s*['""][^'""\s]{8,}['""]|password\s*[:=]\s*['""][^'""\s]{6,}['""](?!.*example|.*test|.*demo)/gi },
     ];
 
     const vulnerabilities = { critical: [], high: [], moderate: [], low: [] };
     const recommendations = [];
-    
+
     // Files to scan (excluding node_modules, .git, etc.)
     const filesToScan = await this.getFilesToScan();
-    
+
     for (const file of filesToScan) {
       try {
         const content = fs.readFileSync(file, 'utf8');
         const lines = content.split('\n');
-        
+
         secretPatterns.forEach(({ name, pattern }) => {
           lines.forEach((line, lineNumber) => {
             const matches = line.match(pattern);
@@ -228,14 +228,14 @@ class SecurityAuditor {
               if (this.isFalsePositive(line, name)) {
                 return;
               }
-              
+
               vulnerabilities.high.push({
                 type: 'Hardcoded Secret',
                 name,
                 file: path.relative(process.cwd(), file),
                 line: lineNumber + 1,
                 description: `Potential ${name.toLowerCase()} found in source code`,
-                recommendation: 'Move secrets to environment variables or secure secret management'
+                recommendation: 'Move secrets to environment variables or secure secret management',
               });
             }
           });
@@ -250,14 +250,14 @@ class SecurityAuditor {
         'Move all secrets to environment variables',
         'Use a secret management service like AWS Secrets Manager or Azure Key Vault',
         'Add sensitive files to .gitignore',
-        'Implement pre-commit hooks to prevent secret commits'
+        'Implement pre-commit hooks to prevent secret commits',
       );
     }
 
     return {
       passed: vulnerabilities.high.length === 0,
       vulnerabilities,
-      recommendations
+      recommendations,
     };
   }
 
@@ -266,27 +266,27 @@ class SecurityAuditor {
    */
   async validateSecurityHeaders() {
     logger.debug('Validating security headers...');
-    
+
     const vulnerabilities = { critical: [], high: [], moderate: [], low: [] };
     const recommendations = [];
-    
+
     // Check if security middleware is configured
     const securityMiddlewarePath = path.join(__dirname, '../utils/security-middleware.js');
     const helmetConfigured = fs.existsSync(securityMiddlewarePath);
-    
+
     if (!helmetConfigured) {
       vulnerabilities.high.push({
         type: 'Missing Security Headers',
         name: 'Security Middleware Not Configured',
         description: 'Application lacks proper security headers middleware',
-        recommendation: 'Configure Helmet.js or similar security middleware'
+        recommendation: 'Configure Helmet.js or similar security middleware',
       });
-      
+
       recommendations.push(
         'Install and configure Helmet.js for security headers',
         'Implement Content Security Policy (CSP)',
         'Enable HSTS for HTTPS connections',
-        'Configure X-Frame-Options to prevent clickjacking'
+        'Configure X-Frame-Options to prevent clickjacking',
       );
     } else {
       // Check if security middleware is properly configured
@@ -297,16 +297,16 @@ class SecurityAuditor {
           'contentSecurityPolicy',
           'hsts',
           'xssFilter',
-          'noSniff'
+          'noSniff',
         ];
-        
+
         requiredHeaders.forEach(header => {
           if (!middlewareContent.includes(header)) {
             vulnerabilities.moderate.push({
               type: 'Security Header Configuration',
               name: `Missing ${header} configuration`,
               description: `Security header ${header} is not configured`,
-              recommendation: `Configure ${header} in security middleware`
+              recommendation: `Configure ${header} in security middleware`,
             });
           }
         });
@@ -318,7 +318,7 @@ class SecurityAuditor {
     return {
       passed: vulnerabilities.high.length === 0 && vulnerabilities.critical.length === 0,
       vulnerabilities,
-      recommendations
+      recommendations,
     };
   }
 
@@ -327,24 +327,24 @@ class SecurityAuditor {
    */
   async checkCORSConfiguration() {
     logger.debug('Checking CORS configuration...');
-    
+
     const vulnerabilities = { critical: [], high: [], moderate: [], low: [] };
     const recommendations = [];
-    
+
     // Look for CORS configuration in main files
     const mainFiles = ['server.js', 'index.js', 'app.js', 'server.prod.js'];
     let corsConfigured = false;
     let corsWildcard = false;
-    
+
     for (const file of mainFiles) {
       const filePath = path.join(process.cwd(), file);
       if (fs.existsSync(filePath)) {
         try {
           const content = fs.readFileSync(filePath, 'utf8');
-          
+
           if (content.includes('cors') || content.includes('Access-Control-Allow-Origin')) {
             corsConfigured = true;
-            
+
             // Check for wildcard CORS
             if (content.includes('origin: "*"') || content.includes('Access-Control-Allow-Origin: *')) {
               corsWildcard = true;
@@ -355,41 +355,41 @@ class SecurityAuditor {
         }
       }
     }
-    
+
     if (!corsConfigured) {
       vulnerabilities.moderate.push({
         type: 'CORS Configuration',
         name: 'CORS Not Configured',
         description: 'CORS middleware is not configured',
-        recommendation: 'Configure CORS middleware with appropriate origin restrictions'
+        recommendation: 'Configure CORS middleware with appropriate origin restrictions',
       });
     } else if (corsWildcard) {
       vulnerabilities.high.push({
         type: 'CORS Misconfiguration',
         name: 'Wildcard CORS Origin',
         description: 'CORS is configured with wildcard (*) origin, allowing requests from any domain',
-        recommendation: 'Restrict CORS origins to specific trusted domains'
+        recommendation: 'Restrict CORS origins to specific trusted domains',
       });
     }
-    
+
     if (corsWildcard) {
       recommendations.push(
         'Replace wildcard CORS with specific allowed origins',
         'Implement environment-specific CORS configuration',
-        'Consider using credentials: true only with specific origins'
+        'Consider using credentials: true only with specific origins',
       );
     } else if (!corsConfigured) {
       recommendations.push(
         'Install and configure CORS middleware',
         'Define allowed origins based on your application requirements',
-        'Consider different CORS policies for different environments'
+        'Consider different CORS policies for different environments',
       );
     }
 
     return {
       passed: vulnerabilities.high.length === 0 && vulnerabilities.critical.length === 0,
       vulnerabilities,
-      recommendations
+      recommendations,
     };
   }
 
@@ -398,32 +398,32 @@ class SecurityAuditor {
    */
   async validateAuthentication() {
     logger.debug('Validating authentication implementation...');
-    
+
     const vulnerabilities = { critical: [], high: [], moderate: [], low: [] };
     const recommendations = [];
-    
+
     // Check for JWT implementation
     const packageJsonPath = path.join(process.cwd(), 'package.json');
     if (fs.existsSync(packageJsonPath)) {
       const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
       const dependencies = { ...packageJson.dependencies, ...packageJson.devDependencies };
-      
+
       if (!dependencies['jsonwebtoken'] && !dependencies['passport']) {
         vulnerabilities.high.push({
           type: 'Authentication',
           name: 'No Authentication Library',
           description: 'No JWT or Passport authentication library found',
-          recommendation: 'Implement proper authentication using JWT or Passport'
+          recommendation: 'Implement proper authentication using JWT or Passport',
         });
       }
-      
+
       // Check for bcrypt for password hashing
       if (!dependencies['bcrypt'] && !dependencies['bcryptjs'] && !dependencies['argon2']) {
         vulnerabilities.high.push({
           type: 'Password Security',
           name: 'No Password Hashing Library',
           description: 'No secure password hashing library found',
-          recommendation: 'Use bcrypt, bcryptjs, or argon2 for password hashing'
+          recommendation: 'Use bcrypt, bcryptjs, or argon2 for password hashing',
         });
       }
     }
@@ -435,7 +435,7 @@ class SecurityAuditor {
         type: 'Authentication Middleware',
         name: 'Missing Authentication Middleware',
         description: 'No authentication middleware found',
-        recommendation: 'Implement JWT authentication middleware'
+        recommendation: 'Implement JWT authentication middleware',
       });
     }
 
@@ -445,14 +445,14 @@ class SecurityAuditor {
         'Use secure password hashing (bcrypt with salt rounds >= 12)',
         'Implement token refresh mechanism',
         'Add rate limiting to authentication endpoints',
-        'Consider multi-factor authentication for admin users'
+        'Consider multi-factor authentication for admin users',
       );
     }
 
     return {
       passed: vulnerabilities.high.length === 0 && vulnerabilities.critical.length === 0,
       vulnerabilities,
-      recommendations
+      recommendations,
     };
   }
 
@@ -461,34 +461,34 @@ class SecurityAuditor {
    */
   async checkAuthorization() {
     logger.debug('Checking authorization and access control...');
-    
+
     const vulnerabilities = { critical: [], high: [], moderate: [], low: [] };
     const recommendations = [];
-    
+
     // Check for role-based access control
     const routeFiles = await this.findRouteFiles();
     let rbacFound = false;
-    let unprotectedAdminRoutes = [];
-    
+    const unprotectedAdminRoutes = [];
+
     for (const routeFile of routeFiles) {
       try {
         const content = fs.readFileSync(routeFile, 'utf8');
-        
+
         // Check for role-based middleware
         if (content.includes('role') || content.includes('permission') || content.includes('authorize')) {
           rbacFound = true;
         }
-        
+
         // Check for unprotected admin routes
         const lines = content.split('\n');
         lines.forEach((line, index) => {
-          if ((line.includes('/admin') || line.includes('admin')) && 
+          if ((line.includes('/admin') || line.includes('admin')) &&
               !line.includes('authenticate') && !line.includes('authorize') &&
               (line.includes('router.') || line.includes('app.'))) {
             unprotectedAdminRoutes.push({
               file: path.relative(process.cwd(), routeFile),
               line: index + 1,
-              content: line.trim()
+              content: line.trim(),
             });
           }
         });
@@ -496,16 +496,16 @@ class SecurityAuditor {
         logger.warn(`Could not analyze route file ${routeFile}`, { error: error.message });
       }
     }
-    
+
     if (!rbacFound) {
       vulnerabilities.high.push({
         type: 'Authorization',
         name: 'Missing Role-Based Access Control',
         description: 'No role-based access control implementation found',
-        recommendation: 'Implement RBAC with proper role and permission checking'
+        recommendation: 'Implement RBAC with proper role and permission checking',
       });
     }
-    
+
     unprotectedAdminRoutes.forEach(route => {
       vulnerabilities.critical.push({
         type: 'Access Control',
@@ -513,7 +513,7 @@ class SecurityAuditor {
         file: route.file,
         line: route.line,
         description: 'Admin route is not protected with authentication/authorization',
-        recommendation: 'Add authentication and admin role check to this route'
+        recommendation: 'Add authentication and admin role check to this route',
       });
     });
 
@@ -523,14 +523,14 @@ class SecurityAuditor {
         'Protect all admin routes with proper authorization',
         'Use principle of least privilege',
         'Implement resource-based access control where needed',
-        'Add audit logging for sensitive operations'
+        'Add audit logging for sensitive operations',
       );
     }
 
     return {
       passed: vulnerabilities.critical.length === 0 && vulnerabilities.high.length === 0,
       vulnerabilities,
-      recommendations
+      recommendations,
     };
   }
 
@@ -539,38 +539,38 @@ class SecurityAuditor {
    */
   async validateInputSanitization() {
     logger.debug('Validating input sanitization...');
-    
+
     const vulnerabilities = { critical: [], high: [], moderate: [], low: [] };
     const recommendations = [];
-    
+
     const packageJsonPath = path.join(process.cwd(), 'package.json');
     if (fs.existsSync(packageJsonPath)) {
       const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
       const dependencies = { ...packageJson.dependencies, ...packageJson.devDependencies };
-      
+
       // Check for validation libraries
       const validationLibs = ['joi', 'yup', 'express-validator', 'ajv'];
       const hasValidation = validationLibs.some(lib => dependencies[lib]);
-      
+
       if (!hasValidation) {
         vulnerabilities.high.push({
           type: 'Input Validation',
           name: 'No Input Validation Library',
           description: 'No input validation library found',
-          recommendation: 'Use a validation library like Joi, Yup, or express-validator'
+          recommendation: 'Use a validation library like Joi, Yup, or express-validator',
         });
       }
-      
+
       // Check for sanitization libraries
       const sanitizationLibs = ['express-mongo-sanitize', 'xss', 'validator'];
       const hasSanitization = sanitizationLibs.some(lib => dependencies[lib]);
-      
+
       if (!hasSanitization) {
         vulnerabilities.moderate.push({
           type: 'Input Sanitization',
           name: 'No Input Sanitization Library',
           description: 'No input sanitization library found',
-          recommendation: 'Use sanitization libraries to prevent XSS and injection attacks'
+          recommendation: 'Use sanitization libraries to prevent XSS and injection attacks',
         });
       }
     }
@@ -581,7 +581,7 @@ class SecurityAuditor {
       try {
         const content = fs.readFileSync(routeFile, 'utf8');
         const lines = content.split('\n');
-        
+
         lines.forEach((line, index) => {
           // Check for potential SQL injection
           if ((line.includes('SELECT') || line.includes('INSERT') || line.includes('UPDATE') || line.includes('DELETE')) &&
@@ -593,7 +593,7 @@ class SecurityAuditor {
               file: path.relative(process.cwd(), routeFile),
               line: index + 1,
               description: 'Raw SQL query with user input without parameterization',
-              recommendation: 'Use parameterized queries or ORM methods'
+              recommendation: 'Use parameterized queries or ORM methods',
             });
           }
         });
@@ -608,14 +608,14 @@ class SecurityAuditor {
         'Use parameterized queries to prevent SQL injection',
         'Sanitize all user inputs to prevent XSS attacks',
         'Validate data types, formats, and ranges',
-        'Use whitelist-based validation rather than blacklist'
+        'Use whitelist-based validation rather than blacklist',
       );
     }
 
     return {
       passed: vulnerabilities.critical.length === 0,
       vulnerabilities,
-      recommendations
+      recommendations,
     };
   }
 
@@ -624,32 +624,32 @@ class SecurityAuditor {
    */
   async checkRateLimiting() {
     logger.debug('Checking rate limiting configuration...');
-    
+
     const vulnerabilities = { critical: [], high: [], moderate: [], low: [] };
     const recommendations = [];
-    
+
     const packageJsonPath = path.join(process.cwd(), 'package.json');
     if (fs.existsSync(packageJsonPath)) {
       const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
       const dependencies = { ...packageJson.dependencies, ...packageJson.devDependencies };
-      
+
       // Check for rate limiting libraries
       const rateLimitLibs = ['express-rate-limit', 'express-slow-down', 'rate-limiter-flexible'];
       const hasRateLimit = rateLimitLibs.some(lib => dependencies[lib]);
-      
+
       if (!hasRateLimit) {
         vulnerabilities.moderate.push({
           type: 'Rate Limiting',
           name: 'No Rate Limiting Library',
           description: 'No rate limiting library found',
-          recommendation: 'Implement rate limiting to prevent abuse and DoS attacks'
+          recommendation: 'Implement rate limiting to prevent abuse and DoS attacks',
         });
-        
+
         recommendations.push(
           'Install express-rate-limit or similar rate limiting middleware',
           'Configure different limits for different endpoint types',
           'Implement stricter limits for authentication endpoints',
-          'Consider using Redis for distributed rate limiting'
+          'Consider using Redis for distributed rate limiting',
         );
       }
     }
@@ -657,7 +657,7 @@ class SecurityAuditor {
     return {
       passed: vulnerabilities.high.length === 0 && vulnerabilities.critical.length === 0,
       vulnerabilities,
-      recommendations
+      recommendations,
     };
   }
 
@@ -666,10 +666,10 @@ class SecurityAuditor {
    */
   async validateLogging() {
     logger.debug('Validating logging configuration...');
-    
+
     const vulnerabilities = { critical: [], high: [], moderate: [], low: [] };
     const recommendations = [];
-    
+
     // Check if logging is configured
     const loggerPath = path.join(process.cwd(), 'utils/logger.js');
     if (!fs.existsSync(loggerPath)) {
@@ -677,22 +677,22 @@ class SecurityAuditor {
         type: 'Security Logging',
         name: 'No Structured Logging',
         description: 'No structured logging implementation found',
-        recommendation: 'Implement structured logging for security monitoring'
+        recommendation: 'Implement structured logging for security monitoring',
       });
     } else {
       try {
         const loggerContent = fs.readFileSync(loggerPath, 'utf8');
-        
+
         // Check if security events are logged
         const securityEvents = ['login', 'logout', 'failed_auth', 'permission_denied', 'admin_action'];
         const missingEvents = securityEvents.filter(event => !loggerContent.includes(event));
-        
+
         if (missingEvents.length > 0) {
           vulnerabilities.low.push({
             type: 'Security Logging',
             name: 'Incomplete Security Event Logging',
             description: `Missing logging for security events: ${missingEvents.join(', ')}`,
-            recommendation: 'Log all security-relevant events for audit purposes'
+            recommendation: 'Log all security-relevant events for audit purposes',
           });
         }
       } catch (error) {
@@ -706,14 +706,14 @@ class SecurityAuditor {
         'Log all authentication and authorization events',
         'Include request IDs for tracing',
         'Implement log rotation and secure storage',
-        'Set up log monitoring and alerting'
+        'Set up log monitoring and alerting',
       );
     }
 
     return {
       passed: vulnerabilities.high.length === 0 && vulnerabilities.critical.length === 0,
       vulnerabilities,
-      recommendations
+      recommendations,
     };
   }
 
@@ -722,26 +722,26 @@ class SecurityAuditor {
    */
   async checkErrorHandling() {
     logger.debug('Checking error handling security...');
-    
+
     const vulnerabilities = { critical: [], high: [], moderate: [], low: [] };
     const recommendations = [];
-    
+
     // Check main application files for error handling
     const mainFiles = ['server.js', 'index.js', 'app.js', 'server.prod.js'];
     let globalErrorHandler = false;
     let exposesStackTrace = false;
-    
+
     for (const file of mainFiles) {
       const filePath = path.join(process.cwd(), file);
       if (fs.existsSync(filePath)) {
         try {
           const content = fs.readFileSync(filePath, 'utf8');
-          
+
           // Check for global error handler
           if (content.includes('app.use') && content.includes('error') && content.includes('req, res, next')) {
             globalErrorHandler = true;
           }
-          
+
           // Check if stack traces are exposed
           if (content.includes('error.stack') || content.includes('err.stack')) {
             exposesStackTrace = true;
@@ -751,22 +751,22 @@ class SecurityAuditor {
         }
       }
     }
-    
+
     if (!globalErrorHandler) {
       vulnerabilities.moderate.push({
         type: 'Error Handling',
         name: 'No Global Error Handler',
         description: 'No global error handler found',
-        recommendation: 'Implement a global error handler to catch and properly handle all errors'
+        recommendation: 'Implement a global error handler to catch and properly handle all errors',
       });
     }
-    
+
     if (exposesStackTrace) {
       vulnerabilities.high.push({
         type: 'Information Disclosure',
         name: 'Stack Trace Exposure',
         description: 'Application may expose stack traces in error responses',
-        recommendation: 'Never expose stack traces in production responses'
+        recommendation: 'Never expose stack traces in production responses',
       });
     }
 
@@ -776,14 +776,14 @@ class SecurityAuditor {
         'Never expose stack traces or internal error details in production',
         'Log detailed errors server-side while sending generic messages to clients',
         'Implement proper error codes and user-friendly error messages',
-        'Consider using error monitoring services like Sentry'
+        'Consider using error monitoring services like Sentry',
       );
     }
 
     return {
       passed: vulnerabilities.high.length === 0 && vulnerabilities.critical.length === 0,
       vulnerabilities,
-      recommendations
+      recommendations,
     };
   }
 
@@ -797,11 +797,11 @@ class SecurityAuditor {
 
     const scanDir = (dir) => {
       const items = fs.readdirSync(dir);
-      
+
       items.forEach(item => {
         const fullPath = path.join(dir, item);
         const stat = fs.statSync(fullPath);
-        
+
         if (stat.isDirectory() && !excludeDirs.includes(item)) {
           scanDir(fullPath);
         } else if (stat.isFile() && extensions.some(ext => item.endsWith(ext))) {
@@ -820,9 +820,9 @@ class SecurityAuditor {
   isFalsePositive(line, secretType) {
     const falsePositives = [
       'example', 'test', 'demo', 'placeholder', 'YOUR_', 'REPLACE_',
-      'TODO', 'FIXME', 'xxx', '***', '...'
+      'TODO', 'FIXME', 'xxx', '***', '...',
     ];
-    
+
     const lineUpper = line.toUpperCase();
     return falsePositives.some(fp => lineUpper.includes(fp.toUpperCase()));
   }
@@ -855,7 +855,7 @@ class SecurityAuditor {
       'lodash': ['4.17.20', 'Prototype Pollution'],
       'moment': ['2.29.1', 'Regular Expression DoS'],
       'debug': ['4.3.1', 'Regular Expression DoS'],
-      'mongoose': ['5.13.2', 'Prototype Pollution']
+      'mongoose': ['5.13.2', 'Prototype Pollution'],
     };
 
     const packageJsonPath = path.join(process.cwd(), 'package.json');
@@ -872,7 +872,7 @@ class SecurityAuditor {
             version: dependencies[pkg],
             vulnerability: vuln,
             description: `${pkg} may have known vulnerabilities`,
-            recommendation: `Update ${pkg} to latest version`
+            recommendation: `Update ${pkg} to latest version`,
           });
         }
       });
@@ -884,8 +884,8 @@ class SecurityAuditor {
       recommendations: vulnerabilities.moderate.length > 0 ? [
         'Update all dependencies to latest versions',
         'Use npm audit or yarn audit regularly',
-        'Consider using automated dependency update tools'
-      ] : []
+        'Consider using automated dependency update tools',
+      ] : [],
     };
   }
 
@@ -910,7 +910,7 @@ class SecurityAuditor {
   async saveAuditResults(results) {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const outputDir = path.join(process.cwd(), 'security', 'audit-results');
-    
+
     try {
       if (!fs.existsSync(outputDir)) {
         fs.mkdirSync(outputDir, { recursive: true });
@@ -918,15 +918,15 @@ class SecurityAuditor {
 
       const filename = `security-audit-${timestamp}.json`;
       const filepath = path.join(outputDir, filename);
-      
+
       fs.writeFileSync(filepath, JSON.stringify(results, null, 2));
-      
+
       // Keep only the last 10 audit results
       const files = fs.readdirSync(outputDir)
         .filter(f => f.startsWith('security-audit-'))
         .sort()
         .reverse();
-        
+
       if (files.length > 10) {
         files.slice(10).forEach(file => {
           fs.unlinkSync(path.join(outputDir, file));
@@ -952,12 +952,12 @@ class SecurityAuditor {
           critical: results.vulnerabilities.critical.length,
           high: results.vulnerabilities.high.length,
           moderate: results.vulnerabilities.moderate.length,
-          low: results.vulnerabilities.low.length
-        }
+          low: results.vulnerabilities.low.length,
+        },
       },
       checkResults: results.checks,
       recommendations: results.recommendations,
-      vulnerabilities: results.vulnerabilities
+      vulnerabilities: results.vulnerabilities,
     };
 
     return report;
@@ -969,5 +969,5 @@ const securityAuditor = new SecurityAuditor();
 
 module.exports = {
   securityAuditor,
-  SecurityAuditor
+  SecurityAuditor,
 };

@@ -1,13 +1,13 @@
 module.exports = {
   // Test environment
   testEnvironment: 'node',
-  
+
   // Test file patterns
   testMatch: [
     '**/__tests__/**/*.js',
     '**/?(*.)+(spec|test).js',
   ],
-  
+
   // Coverage configuration
   collectCoverage: true,
   coverageDirectory: 'coverage',
@@ -17,7 +17,7 @@ module.exports = {
     'html',
     'json',
   ],
-  
+
   // Coverage thresholds
   coverageThreshold: {
     global: {
@@ -27,7 +27,7 @@ module.exports = {
       statements: 80,
     },
   },
-  
+
   // Files to collect coverage from
   collectCoverageFrom: [
     'src/**/*.js',
@@ -41,32 +41,32 @@ module.exports = {
     '!**/*.test.js',
     '!**/*.spec.js',
   ],
-  
+
   // Setup files
   setupFilesAfterEnv: [
     '<rootDir>/test/setup.js',
   ],
-  
+
   // Module paths
   modulePaths: [
     '<rootDir>/src',
     '<rootDir>',
   ],
-  
+
   // Test timeout
   testTimeout: 10000,
-  
+
   // Verbose output
   verbose: true,
-  
+
   // Error handling
   errorOnDeprecated: true,
-  
+
   // Mock configuration
   clearMocks: true,
   restoreMocks: true,
   resetMocks: false,
-  
+
   // Transform configuration for ES modules
   transform: {
     '^.+\\.js$': 'babel-jest',

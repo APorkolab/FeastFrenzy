@@ -85,26 +85,26 @@ Response includes pagination metadata:
       contact: {
         name: 'FeastFrenzy Team',
         email: 'support@feastfrenzy.com',
-        url: 'https://github.com/dr.porkolabadam/FeastFrenzy'
+        url: 'https://github.com/dr.porkolabadam/FeastFrenzy',
       },
       license: {
         name: 'MIT',
-        url: 'https://opensource.org/licenses/MIT'
-      }
+        url: 'https://opensource.org/licenses/MIT',
+      },
     },
     servers: [
       {
         url: process.env.API_BASE_URL || 'http://localhost:3000',
-        description: 'Development server'
+        description: 'Development server',
       },
       {
         url: 'https://api.feastfrenzy.com',
-        description: 'Production server'
+        description: 'Production server',
       },
       {
         url: 'https://staging-api.feastfrenzy.com',
-        description: 'Staging server'
-      }
+        description: 'Staging server',
+      },
     ],
     components: {
       securitySchemes: {
@@ -112,14 +112,14 @@ Response includes pagination metadata:
           type: 'http',
           scheme: 'bearer',
           bearerFormat: 'JWT',
-          description: 'JWT authentication token'
+          description: 'JWT authentication token',
         },
         apiKeyAuth: {
           type: 'apiKey',
           in: 'header',
           name: 'X-API-Key',
-          description: 'API key for service-to-service communication'
-        }
+          description: 'API key for service-to-service communication',
+        },
       },
       schemas: {
         // Employee schemas
@@ -130,71 +130,71 @@ Response includes pagination metadata:
             id: {
               type: 'integer',
               description: 'Unique identifier',
-              example: 1
+              example: 1,
             },
             employeeId: {
               type: 'string',
               description: 'Employee ID (unique)',
               example: 'EMP001',
-              pattern: '^EMP[0-9]{3,}$'
+              pattern: '^EMP[0-9]{3,}$',
             },
             name: {
               type: 'string',
               description: 'Full name',
               example: 'John Doe',
               minLength: 2,
-              maxLength: 100
+              maxLength: 100,
             },
             email: {
               type: 'string',
               format: 'email',
               description: 'Email address',
-              example: 'john.doe@company.com'
+              example: 'john.doe@company.com',
             },
             role: {
               type: 'string',
               enum: ['employee', 'manager', 'admin'],
               description: 'User role',
-              example: 'employee'
+              example: 'employee',
             },
             balance: {
               type: 'number',
               format: 'float',
               description: 'Current balance in currency',
-              example: 150.50
+              example: 150.50,
             },
             isActive: {
               type: 'boolean',
               description: 'Whether the employee is active',
-              example: true
+              example: true,
             },
             department: {
               type: 'string',
               description: 'Department name',
               example: 'Engineering',
-              maxLength: 50
+              maxLength: 50,
             },
             hireDate: {
               type: 'string',
               format: 'date',
               description: 'Hire date',
-              example: '2023-01-15'
+              example: '2023-01-15',
             },
             createdAt: {
               type: 'string',
               format: 'date-time',
               description: 'Record creation timestamp',
-              example: '2023-01-15T10:30:00.000Z'
+              example: '2023-01-15T10:30:00.000Z',
             },
             updatedAt: {
               type: 'string',
               format: 'date-time',
               description: 'Record last update timestamp',
-              example: '2023-12-01T10:30:00.000Z'
-            }
-          }
+              example: '2023-12-01T10:30:00.000Z',
+            },
+          },
         },
-        
+
         // Product schemas
         Product: {
           type: 'object',
@@ -203,62 +203,62 @@ Response includes pagination metadata:
             id: {
               type: 'integer',
               description: 'Unique identifier',
-              example: 1
+              example: 1,
             },
             name: {
               type: 'string',
               description: 'Product name',
               example: 'Coffee',
               minLength: 1,
-              maxLength: 100
+              maxLength: 100,
             },
             description: {
               type: 'string',
               description: 'Product description',
               example: 'Premium coffee blend',
-              maxLength: 500
+              maxLength: 500,
             },
             price: {
               type: 'number',
               format: 'float',
               description: 'Product price',
               example: 2.50,
-              minimum: 0
+              minimum: 0,
             },
             category: {
               type: 'string',
               description: 'Product category',
               example: 'Beverages',
-              maxLength: 50
+              maxLength: 50,
             },
             isAvailable: {
               type: 'boolean',
               description: 'Whether the product is available',
-              example: true
+              example: true,
             },
             stock: {
               type: 'integer',
               description: 'Current stock quantity',
               example: 100,
-              minimum: 0
+              minimum: 0,
             },
             imageUrl: {
               type: 'string',
               format: 'uri',
               description: 'Product image URL',
-              example: 'https://example.com/images/coffee.jpg'
+              example: 'https://example.com/images/coffee.jpg',
             },
             createdAt: {
               type: 'string',
               format: 'date-time',
-              example: '2023-01-15T10:30:00.000Z'
+              example: '2023-01-15T10:30:00.000Z',
             },
             updatedAt: {
               type: 'string',
               format: 'date-time',
-              example: '2023-12-01T10:30:00.000Z'
-            }
-          }
+              example: '2023-12-01T10:30:00.000Z',
+            },
+          },
         },
 
         // Purchase schemas
@@ -269,51 +269,51 @@ Response includes pagination metadata:
             id: {
               type: 'integer',
               description: 'Unique identifier',
-              example: 1
+              example: 1,
             },
             employeeId: {
               type: 'integer',
               description: 'Employee ID',
-              example: 1
+              example: 1,
             },
             employee: {
-              $ref: '#/components/schemas/Employee'
+              $ref: '#/components/schemas/Employee',
             },
             items: {
               type: 'array',
               items: {
-                $ref: '#/components/schemas/PurchaseItem'
-              }
+                $ref: '#/components/schemas/PurchaseItem',
+              },
             },
             totalAmount: {
               type: 'number',
               format: 'float',
               description: 'Total purchase amount',
-              example: 15.75
+              example: 15.75,
             },
             status: {
               type: 'string',
               enum: ['pending', 'completed', 'cancelled', 'refunded'],
               description: 'Purchase status',
-              example: 'completed'
+              example: 'completed',
             },
             paymentMethod: {
               type: 'string',
               enum: ['balance', 'card', 'cash'],
               description: 'Payment method used',
-              example: 'balance'
+              example: 'balance',
             },
             notes: {
               type: 'string',
               description: 'Additional notes',
-              maxLength: 500
+              maxLength: 500,
             },
             createdAt: {
               type: 'string',
               format: 'date-time',
-              example: '2023-12-01T10:30:00.000Z'
-            }
-          }
+              example: '2023-12-01T10:30:00.000Z',
+            },
+          },
         },
 
         PurchaseItem: {
@@ -322,35 +322,35 @@ Response includes pagination metadata:
           properties: {
             id: {
               type: 'integer',
-              example: 1
+              example: 1,
             },
             productId: {
               type: 'integer',
               description: 'Product ID',
-              example: 1
+              example: 1,
             },
             product: {
-              $ref: '#/components/schemas/Product'
+              $ref: '#/components/schemas/Product',
             },
             quantity: {
               type: 'integer',
               description: 'Quantity purchased',
               example: 2,
-              minimum: 1
+              minimum: 1,
             },
             unitPrice: {
               type: 'number',
               format: 'float',
               description: 'Unit price at time of purchase',
-              example: 2.50
+              example: 2.50,
             },
             subtotal: {
               type: 'number',
               format: 'float',
               description: 'Subtotal (quantity * unitPrice)',
-              example: 5.00
-            }
-          }
+              example: 5.00,
+            },
+          },
         },
 
         // Authentication schemas
@@ -362,20 +362,20 @@ Response includes pagination metadata:
               type: 'string',
               format: 'email',
               description: 'User email',
-              example: 'admin@company.com'
+              example: 'admin@company.com',
             },
             password: {
               type: 'string',
               description: 'User password',
               example: 'SecurePassword123',
-              minLength: 8
+              minLength: 8,
             },
             rememberMe: {
               type: 'boolean',
               description: 'Extended session duration',
-              example: false
-            }
-          }
+              example: false,
+            },
+          },
         },
 
         AuthResponse: {
@@ -383,7 +383,7 @@ Response includes pagination metadata:
           properties: {
             success: {
               type: 'boolean',
-              example: true
+              example: true,
             },
             data: {
               type: 'object',
@@ -391,24 +391,24 @@ Response includes pagination metadata:
                 token: {
                   type: 'string',
                   description: 'JWT access token',
-                  example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+                  example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
                 },
                 refreshToken: {
                   type: 'string',
                   description: 'JWT refresh token',
-                  example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+                  example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
                 },
                 expiresIn: {
                   type: 'integer',
                   description: 'Token expiration in seconds',
-                  example: 3600
+                  example: 3600,
                 },
                 user: {
-                  $ref: '#/components/schemas/Employee'
-                }
-              }
-            }
-          }
+                  $ref: '#/components/schemas/Employee',
+                },
+              },
+            },
+          },
         },
 
         // Common schemas
@@ -417,22 +417,22 @@ Response includes pagination metadata:
           properties: {
             success: {
               type: 'boolean',
-              example: true
+              example: true,
             },
             data: {
               type: 'object',
-              description: 'Response data'
+              description: 'Response data',
             },
             message: {
               type: 'string',
-              description: 'Response message'
+              description: 'Response message',
             },
             timestamp: {
               type: 'string',
               format: 'date-time',
-              example: '2023-12-01T10:30:00.000Z'
-            }
-          }
+              example: '2023-12-01T10:30:00.000Z',
+            },
+          },
         },
 
         Error: {
@@ -440,7 +440,7 @@ Response includes pagination metadata:
           properties: {
             success: {
               type: 'boolean',
-              example: false
+              example: false,
             },
             error: {
               type: 'object',
@@ -448,25 +448,25 @@ Response includes pagination metadata:
                 code: {
                   type: 'string',
                   description: 'Error code',
-                  example: 'VALIDATION_ERROR'
+                  example: 'VALIDATION_ERROR',
                 },
                 message: {
                   type: 'string',
                   description: 'Error message',
-                  example: 'Validation failed'
+                  example: 'Validation failed',
                 },
                 details: {
                   type: 'object',
-                  description: 'Additional error details'
-                }
-              }
+                  description: 'Additional error details',
+                },
+              },
             },
             timestamp: {
               type: 'string',
               format: 'date-time',
-              example: '2023-12-01T10:30:00.000Z'
-            }
-          }
+              example: '2023-12-01T10:30:00.000Z',
+            },
+          },
         },
 
         Pagination: {
@@ -474,29 +474,29 @@ Response includes pagination metadata:
           properties: {
             page: {
               type: 'integer',
-              example: 1
+              example: 1,
             },
             limit: {
               type: 'integer',
-              example: 10
+              example: 10,
             },
             total: {
               type: 'integer',
-              example: 150
+              example: 150,
             },
             totalPages: {
               type: 'integer',
-              example: 15
+              example: 15,
             },
             hasNext: {
               type: 'boolean',
-              example: true
+              example: true,
             },
             hasPrev: {
               type: 'boolean',
-              example: false
-            }
-          }
+              example: false,
+            },
+          },
         },
 
         // Health check schemas
@@ -506,25 +506,25 @@ Response includes pagination metadata:
             status: {
               type: 'string',
               enum: ['healthy', 'unhealthy'],
-              example: 'healthy'
+              example: 'healthy',
             },
             timestamp: {
               type: 'string',
               format: 'date-time',
-              example: '2023-12-01T10:30:00.000Z'
+              example: '2023-12-01T10:30:00.000Z',
             },
             uptime: {
               type: 'object',
               properties: {
                 seconds: {
                   type: 'integer',
-                  example: 86400
+                  example: 86400,
                 },
                 human: {
                   type: 'string',
-                  example: '1d 0h 0m 0s'
-                }
-              }
+                  example: '1d 0h 0m 0s',
+                },
+              },
             },
             checks: {
               type: 'array',
@@ -533,88 +533,88 @@ Response includes pagination metadata:
                 properties: {
                   name: {
                     type: 'string',
-                    example: 'database'
+                    example: 'database',
                   },
                   healthy: {
                     type: 'boolean',
-                    example: true
+                    example: true,
                   },
                   duration: {
                     type: 'integer',
-                    example: 45
+                    example: 45,
                   },
                   timestamp: {
                     type: 'string',
-                    format: 'date-time'
-                  }
-                }
-              }
-            }
-          }
-        }
+                    format: 'date-time',
+                  },
+                },
+              },
+            },
+          },
+        },
       },
-      
+
       responses: {
         UnauthorizedError: {
           description: 'Authentication token is missing or invalid',
           content: {
             'application/json': {
               schema: {
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/Error',
               },
               example: {
                 success: false,
                 error: {
                   code: 'UNAUTHORIZED',
-                  message: 'Authentication required'
+                  message: 'Authentication required',
                 },
-                timestamp: '2023-12-01T10:30:00.000Z'
-              }
-            }
-          }
+                timestamp: '2023-12-01T10:30:00.000Z',
+              },
+            },
+          },
         },
         ForbiddenError: {
           description: 'Insufficient permissions',
           content: {
             'application/json': {
               schema: {
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/Error',
               },
               example: {
                 success: false,
                 error: {
                   code: 'FORBIDDEN',
-                  message: 'Insufficient permissions'
+                  message: 'Insufficient permissions',
                 },
-                timestamp: '2023-12-01T10:30:00.000Z'
-              }
-            }
-          }
+                timestamp: '2023-12-01T10:30:00.000Z',
+              },
+            },
+          },
         },
         NotFoundError: {
           description: 'Resource not found',
           content: {
             'application/json': {
               schema: {
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/Error',
               },
               example: {
                 success: false,
                 error: {
                   code: 'NOT_FOUND',
-                  message: 'Resource not found'
+                  message: 'Resource not found',
                 },
-                timestamp: '2023-12-01T10:30:00.000Z'
-              }
-            }
-          }
+                timestamp: '2023-12-01T10:30:00.000Z',
+              },
+            },
+          },
         },
         ValidationError: {
           description: 'Validation error',
           content: {
             'application/json': {
               schema: {
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/Error',
               },
               example: {
                 success: false,
@@ -623,32 +623,32 @@ Response includes pagination metadata:
                   message: 'Validation failed',
                   details: {
                     field: 'email',
-                    message: 'Invalid email format'
-                  }
+                    message: 'Invalid email format',
+                  },
                 },
-                timestamp: '2023-12-01T10:30:00.000Z'
-              }
-            }
-          }
+                timestamp: '2023-12-01T10:30:00.000Z',
+              },
+            },
+          },
         },
         ServerError: {
           description: 'Internal server error',
           content: {
             'application/json': {
               schema: {
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/Error',
               },
               example: {
                 success: false,
                 error: {
                   code: 'INTERNAL_SERVER_ERROR',
-                  message: 'Internal server error'
+                  message: 'Internal server error',
                 },
-                timestamp: '2023-12-01T10:30:00.000Z'
-              }
-            }
-          }
-        }
+                timestamp: '2023-12-01T10:30:00.000Z',
+              },
+            },
+          },
+        },
       },
 
       parameters: {
@@ -660,8 +660,8 @@ Response includes pagination metadata:
           schema: {
             type: 'integer',
             minimum: 1,
-            default: 1
-          }
+            default: 1,
+          },
         },
         LimitParam: {
           name: 'limit',
@@ -672,8 +672,8 @@ Response includes pagination metadata:
             type: 'integer',
             minimum: 1,
             maximum: 100,
-            default: 10
-          }
+            default: 10,
+          },
         },
         SortParam: {
           name: 'sort',
@@ -682,8 +682,8 @@ Response includes pagination metadata:
           required: false,
           schema: {
             type: 'string',
-            default: 'createdAt'
-          }
+            default: 'createdAt',
+          },
         },
         OrderParam: {
           name: 'order',
@@ -693,53 +693,53 @@ Response includes pagination metadata:
           schema: {
             type: 'string',
             enum: ['asc', 'desc'],
-            default: 'desc'
-          }
-        }
-      }
+            default: 'desc',
+          },
+        },
+      },
     },
     security: [
       {
-        bearerAuth: []
-      }
+        bearerAuth: [],
+      },
     ],
     tags: [
       {
         name: 'Authentication',
-        description: 'Authentication and authorization endpoints'
+        description: 'Authentication and authorization endpoints',
       },
       {
         name: 'Employees',
-        description: 'Employee management operations'
+        description: 'Employee management operations',
       },
       {
         name: 'Products',
-        description: 'Product catalog management'
+        description: 'Product catalog management',
       },
       {
         name: 'Purchases',
-        description: 'Purchase transaction operations'
+        description: 'Purchase transaction operations',
       },
       {
         name: 'Reports',
-        description: 'Analytics and reporting endpoints'
+        description: 'Analytics and reporting endpoints',
       },
       {
         name: 'Health',
-        description: 'Health check and monitoring endpoints'
+        description: 'Health check and monitoring endpoints',
       },
       {
         name: 'Admin',
-        description: 'Administrative operations'
-      }
-    ]
+        description: 'Administrative operations',
+      },
+    ],
   },
   apis: [
     path.join(__dirname, '../routes/*.js'),
     path.join(__dirname, '../controllers/*.js'),
     path.join(__dirname, '../models/*.js'),
-    path.join(__dirname, '../docs/swagger/*.yaml')
-  ]
+    path.join(__dirname, '../docs/swagger/*.yaml'),
+  ],
 };
 
 // Generate OpenAPI specification
@@ -779,12 +779,12 @@ const swaggerOptions = {
     filter: true,
     showExtensions: true,
     showCommonExtensions: true,
-    tryItOutEnabled: true
-  }
+    tryItOutEnabled: true,
+  },
 };
 
 module.exports = {
   specs,
   swaggerUi,
-  swaggerOptions
+  swaggerOptions,
 };

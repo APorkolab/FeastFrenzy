@@ -10,7 +10,7 @@ const prometheus = require('prom-client');
 const register = new prometheus.Registry();
 
 // Add default system metrics
-prometheus.collectDefaultMetrics({ 
+prometheus.collectDefaultMetrics({
   register,
   timeout: 5000,
   gcDurationBuckets: [0.001, 0.01, 0.1, 1, 2, 5],
@@ -111,12 +111,12 @@ const performanceMiddleware = () => {
     (req, res, next) => {
       connectionCount++;
       activeConnections.set(connectionCount);
-      
+
       res.on('finish', () => {
         connectionCount--;
         activeConnections.set(connectionCount);
       });
-      
+
       next();
     },
 
@@ -125,16 +125,16 @@ const performanceMiddleware = () => {
       const route = req.route?.path || req.path;
       const method = req.method;
       const statusCode = res.statusCode.toString();
-      
+
       // Record metrics
       httpRequestsTotal.labels(method, route, statusCode).inc();
       httpRequestDuration.labels(method, route, statusCode).observe(time / 1000);
-      
+
       // Track request/response sizes
       if (req.headers['content-length']) {
         httpRequestSize.labels(method, route).observe(parseInt(req.headers['content-length']));
       }
-      
+
       const responseSize = res.get('content-length');
       if (responseSize) {
         httpResponseSize.labels(method, route, statusCode).observe(parseInt(responseSize));
@@ -148,23 +148,23 @@ const performanceMiddleware = () => {
       memoryUsage.labels('heapTotal').set(usage.heapTotal);
       memoryUsage.labels('heapUsed').set(usage.heapUsed);
       memoryUsage.labels('external').set(usage.external);
-      
+
       next();
     },
 
     // Error tracking
     (req, res, next) => {
       const originalSend = res.send;
-      
-      res.send = function(body) {
+
+      res.send = function (body) {
         if (res.statusCode >= 400) {
           const errorType = res.statusCode >= 500 ? 'server_error' : 'client_error';
           errorsTotal.labels(errorType, res.statusCode.toString()).inc();
         }
-        
+
         return originalSend.call(this, body);
       };
-      
+
       next();
     },
   ];
@@ -181,14 +181,14 @@ const updateBusinessMetrics = async () => {
   try {
     // This would be called periodically to update business metrics
     // Implementation depends on your models being available
-    
+
     // Example:
     // const employeeCount = await Employee.count();
     // employeesTotal.set(employeeCount);
-    
+
     // const productCount = await Product.count();
     // productsTotal.set(productCount);
-    
+
     // const todayPurchases = await Purchase.count({
     //   where: {
     //     createdAt: {
@@ -197,7 +197,7 @@ const updateBusinessMetrics = async () => {
     //   }
     // });
     // purchasesToday.inc(todayPurchases);
-    
+
     console.log('📊 Business metrics updated');
   } catch (error) {
     console.error('❌ Failed to update business metrics:', error);
@@ -285,26 +285,26 @@ const healthCheck = (req, res) => {
 const startMetricsCollection = () => {
   // Update business metrics every 5 minutes
   setInterval(updateBusinessMetrics, 5 * 60 * 1000);
-  
+
   // Initial update
   setTimeout(updateBusinessMetrics, 10000); // Wait 10s for app to initialize
-  
+
   console.log('📈 Performance monitoring started');
 };
 
 module.exports = {
   // Middleware
   performance: performanceMiddleware(),
-  
+
   // Endpoints
   metricsEndpoint,
   healthCheck,
-  
+
   // Utilities
   trackDatabaseQuery,
   performanceUtils,
   startMetricsCollection,
-  
+
   // Direct access to metrics (for custom tracking)
   metrics: {
     httpRequestsTotal,
@@ -320,7 +320,7 @@ module.exports = {
     revenueToday,
     errorsTotal,
   },
-  
+
   // Prometheus register
   register,
 };
