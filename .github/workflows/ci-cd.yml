@@ -31,10 +31,11 @@ jobs:
             backend/package-lock.json
             frontend/package-lock.json
 
-      - name: Install dependencies
-        run: |
-          cd ${{ env.BACKEND_DIR }} && npm ci
-          cd ${{ env.FRONTEND_DIR }} && npm ci --legacy-peer-deps
+      - name: Install backend dependencies
+        run: cd ${{ env.BACKEND_DIR }} && npm ci
+        
+      - name: Install frontend dependencies
+        run: cd ${{ env.FRONTEND_DIR }} && npm ci --legacy-peer-deps
 
       - name: Run ESLint (Backend)
         run: cd ${{ env.BACKEND_DIR }} && npm run lint
