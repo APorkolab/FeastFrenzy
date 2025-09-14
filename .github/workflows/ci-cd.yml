@@ -190,7 +190,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Docker Build & Push
     needs: [build]
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/main' or github.ref == 'refs/heads/develop'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -199,7 +199,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Login to Container Registry
-        if: ${{ secrets.DOCKER_REGISTRY_PASSWORD != '' || secrets.GITHUB_TOKEN != '' }}
+        if: ${{ secrets.DOCKER_REGISTRY_PASSWORD != '' or secrets.GITHUB_TOKEN != '' }}
         uses: docker/login-action@v3
         with:
           registry: ${{ vars.DOCKER_REGISTRY_URL || 'ghcr.io' }}
@@ -224,7 +224,7 @@ jobs:
         with:
           context: ./backend
           file: ./backend/Dockerfile
-          push: ${{ secrets.DOCKER_REGISTRY_PASSWORD != '' || secrets.GITHUB_TOKEN != '' }}
+          push: ${{ secrets.DOCKER_REGISTRY_PASSWORD != '' or secrets.GITHUB_TOKEN != '' }}
           tags: ${{ vars.DOCKER_REGISTRY_URL || 'ghcr.io' }}/${{ github.repository }}/backend:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
@@ -236,7 +236,7 @@ jobs:
         with:
           context: ./frontend
           file: ./frontend/Dockerfile
-          push: ${{ secrets.DOCKER_REGISTRY_PASSWORD != '' || secrets.GITHUB_TOKEN != '' }}
+          push: ${{ secrets.DOCKER_REGISTRY_PASSWORD != '' or secrets.GITHUB_TOKEN != '' }}
           tags: ${{ vars.DOCKER_REGISTRY_URL || 'ghcr.io' }}/${{ github.repository }}/frontend:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
@@ -257,7 +257,6 @@ jobs:
         run: |
           echo "Deploying to staging environment..."
           # Add your staging deployment commands here
-          # Example: kubectl apply -f k8s/staging/ or terraform apply
 
   # Deploy to Production
   deploy-production:
@@ -273,7 +272,6 @@ jobs:
         run: |
           echo "Deploying to production environment..."
           # Add your production deployment commands here
-          # Example: kubectl apply -f k8s/production/ or terraform apply
 
   # Post-deployment Testing
   smoke-tests:
@@ -286,7 +284,6 @@ jobs:
         run: |
           echo "Running smoke tests against staging..."
           # Add smoke test commands here
-          # Example: newman run postman-collection.json --env-var "baseUrl=https://staging.feastfrenzy.com"
 
   # Notification
   notify:
@@ -296,13 +293,11 @@ jobs:
     if: always()
     steps:
       - name: Notify on success
-        if: needs.deploy-production.result == 'success' || needs.deploy-staging.result == 'success'
+        if: needs.deploy-production.result == 'success' or needs.deploy-staging.result == 'success'
         run: |
           echo "Deployment successful! 🎉"
-          # Add notification logic here (Slack, Teams, etc.)
 
       - name: Notify on failure
-        if: needs.deploy-production.result == 'failure' || needs.deploy-staging.result == 'failure'
+        if: needs.deploy-production.result == 'failure' or needs.deploy-staging.result == 'failure'
         run: |
           echo "Deployment failed! ❌"
-          # Add failure notification logic here
