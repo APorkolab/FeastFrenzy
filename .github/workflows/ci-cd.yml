@@ -47,7 +47,7 @@ jobs:
           cd ${{ env.FRONTEND_DIR }} && npm audit --audit-level moderate
 
       - name: SonarCloud Scan
-        if: ${{ secrets.SONAR_TOKEN }}
+        if: ${{ secrets.SONAR_TOKEN != '' }}
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -110,7 +110,7 @@ jobs:
         continue-on-error: true
 
       - name: Upload coverage reports
-        if: ${{ secrets.CODECOV_TOKEN }}
+        if: ${{ secrets.CODECOV_TOKEN != '' }}
         uses: codecov/codecov-action@v3
         with:
           file: ./backend/coverage/lcov.info
@@ -140,7 +140,7 @@ jobs:
         run: cd ${{ env.FRONTEND_DIR }} && npm run test:ci
 
       - name: Upload coverage reports
-        if: ${{ secrets.CODECOV_TOKEN }}
+        if: ${{ secrets.CODECOV_TOKEN != '' }}
         uses: codecov/codecov-action@v3
         with:
           file: ./frontend/coverage/lcov.info
@@ -233,11 +233,12 @@ jobs:
         continue-on-error: true
 
       - name: Build and push frontend image
+        if: ${{ secrets.DOCKER_REGISTRY_PASSWORD != '' || secrets.GITHUB_TOKEN != '' }}
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
           file: ./frontend/Dockerfile
-          push: ${{ secrets.DOCKER_REGISTRY_PASSWORD || secrets.GITHUB_TOKEN }}
+          push: true
           tags: ${{ vars.DOCKER_REGISTRY_URL || 'ghcr.io' }}/${{ github.repository }}/frontend:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
