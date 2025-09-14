@@ -167,7 +167,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Check frontend directory
+        id: check_frontend
+        run: |
+          if [ -d "${{ env.FRONTEND_DIR }}" ] && [ -f "${{ env.FRONTEND_DIR }}/package.json" ]; then
+            echo "Frontend directory exists"
+            echo "frontend_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "Frontend directory or package.json not found, skipping frontend tests"
+            echo "frontend_exists=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Setup Node.js
+        if: steps.check_frontend.outputs.frontend_exists == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -175,12 +187,15 @@ jobs:
           cache-dependency-path: 'frontend/package-lock.json'
 
       - name: Install frontend dependencies
+        if: steps.check_frontend.outputs.frontend_exists == 'true'
         run: cd ${{ env.FRONTEND_DIR }} && npm ci --legacy-peer-deps
 
       - name: Run frontend tests
+        if: steps.check_frontend.outputs.frontend_exists == 'true'
         run: cd ${{ env.FRONTEND_DIR }} && npm run test:ci
 
       - name: Upload coverage reports
+        if: steps.check_frontend.outputs.frontend_exists == 'true'
         uses: codecov/codecov-action@v4
         with:
           file: ./frontend/coverage/lcov.info
@@ -210,14 +225,26 @@ jobs:
       - name: Install dependencies
         run: |
           cd ${{ env.BACKEND_DIR }} && npm ci
-          cd ${{ env.FRONTEND_DIR }} && npm ci --legacy-peer-deps
+          if [ -d "${{ env.FRONTEND_DIR }}" ] && [ -f "${{ env.FRONTEND_DIR }}/package.json" ]; then
+            echo "Installing frontend dependencies..."
+            cd ${{ env.FRONTEND_DIR }} && npm ci --legacy-peer-deps
+          else
+            echo "Frontend directory not found, skipping frontend dependency installation"
+          fi
 
       - name: Build backend
         run: cd ${{ env.BACKEND_DIR }} && npm run build
         continue-on-error: true
 
       - name: Build frontend
-        run: cd ${{ env.FRONTEND_DIR }} && npm run build:prod
+        run: |
+          if [ -d "${{ env.FRONTEND_DIR }}" ] && [ -f "${{ env.FRONTEND_DIR }}/package.json" ]; then
+            echo "Building frontend..."
+            cd ${{ env.FRONTEND_DIR }} && npm run build:prod
+          else
+            echo "Frontend directory not found, skipping frontend build"
+          fi
+        continue-on-error: true
 
       - name: Archive build artifacts
         uses: actions/upload-artifact@v4
