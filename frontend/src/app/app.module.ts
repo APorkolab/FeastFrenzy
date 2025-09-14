@@ -7,7 +7,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EmployeeReportComponent } from './page/employee-report/employee-report.component';
-import { ProductReportComponent } from './page/product-report/product-report.component';
 import { AdminComponent } from './page/admin/admin.component';
 import { EmployeesComponent } from './page/employees/employees.component';
 import { ProductsComponent } from './page/products/products.component';
@@ -22,7 +21,6 @@ import { PurchaseReportComponent } from './page/purchase-report/purchase-report.
   declarations: [
     AppComponent,
     EmployeeReportComponent,
-    ProductReportComponent,
     AdminComponent,
     EmployeesComponent,
     ProductsComponent,

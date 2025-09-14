@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Purchase } from 'src/app/model/purchase';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';import { Purchase } from 'src/app/model/purchase';
 import { PurchaseService } from 'src/app/service/purchase.service';
 
 @Component({

@@ -9,7 +9,7 @@ describe('EmployeesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ EmployeesComponent, HttpClientTestingModule, RouterTestingModule ]
+      declarations: [ EmployeesComponent ]
     })
     .compileComponents();
 

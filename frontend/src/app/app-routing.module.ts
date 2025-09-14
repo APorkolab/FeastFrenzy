@@ -32,3 +32,6 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+
+// Export routes for standalone bootstrap
+export { routes };

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Product } from 'src/app/model/product';
 import { ProductService } from 'src/app/service/product.service';
 
@@ -6,7 +8,9 @@ import { ProductService } from 'src/app/service/product.service';
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
-  styles: ['']
+  styles: [''],
+  standalone: true,
+  imports: [CommonModule, FormsModule]
 })
 export class ProductsComponent implements OnInit {
 

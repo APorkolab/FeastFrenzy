@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Employee } from 'src/app/model/employee';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';import { Employee } from 'src/app/model/employee';
 import { EmployeeService } from 'src/app/service/employee.service';
 
 @Component({

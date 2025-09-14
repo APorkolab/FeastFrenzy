@@ -1,14 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { Employee } from 'src/app/model/employee';
-import { EmployeeService } from 'src/app/service/employee.service';
-import { Purchase } from 'src/app/model/purchase';
-import { PurchaseService } from 'src/app/service/purchase.service';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Employee } from 'src/app/model/employee';
+import { Purchase } from 'src/app/model/purchase';
+import { EmployeeService } from 'src/app/service/employee.service';
+import { PurchaseService } from 'src/app/service/purchase.service';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-employee-report',
   templateUrl: './employee-report.component.html',
-  styles: ['']
+  styles: [''],
+  standalone: true,
+  imports: [CommonModule, FormsModule]
 })
 export class EmployeeReportComponent implements OnInit {
 
