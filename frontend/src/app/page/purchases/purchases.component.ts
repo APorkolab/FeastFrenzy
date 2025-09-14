@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';import { Purchase } from 'src/app/model/purchase';
+import { FormsModule } from '@angular/forms';
+import { Purchase } from 'src/app/model/purchase';
 import { PurchaseService } from 'src/app/service/purchase.service';
 
 @Component({
   selector: 'app-purchases',
   templateUrl: './purchases.component.html',
-  styleUrls: ['./purchases.component.scss']
+  styleUrls: ['./purchases.component.scss'],
+  standalone: true,
+  imports: [CommonModule, FormsModule]
 })
 export class PurchasesComponent implements OnInit {
   purchases: Purchase[] = [];

@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';import { HttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import { Purchase } from 'src/app/model/purchase';
 
 @Component({
   selector: 'app-purchase-report',
   templateUrl: './purchase-report.component.html',
-  styles: ['']
+  styles: [''],
+  standalone: true,
+  imports: [CommonModule, FormsModule]
 })
 export class PurchaseReportComponent implements OnInit {
   purchases: Purchase[] = [];

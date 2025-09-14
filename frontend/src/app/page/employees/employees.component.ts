@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';import { Employee } from 'src/app/model/employee';
+import { FormsModule } from '@angular/forms';
+import { Employee } from 'src/app/model/employee';
 import { EmployeeService } from 'src/app/service/employee.service';
 
 @Component({
   selector: 'app-employees',
   templateUrl: './employees.component.html',
-  styleUrls: ['./employees.component.css']
+  styleUrls: ['./employees.component.css'],
+  standalone: true,
+  imports: [CommonModule, FormsModule]
 })
 export class EmployeesComponent implements OnInit {
 

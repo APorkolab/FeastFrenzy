@@ -10,7 +10,9 @@ import { Location } from '@angular/common';
 @Component({
   selector: 'app-employee-detail',
   templateUrl: './employee-detail.component.html',
-  styleUrls: ['./employee-detail.component.css']
+  styleUrls: ['./employee-detail.component.css'],
+  standalone: true,
+  imports: [CommonModule, FormsModule]
 })
 export class EmployeeDetailComponent implements OnInit {
 

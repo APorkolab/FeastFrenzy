@@ -4,7 +4,9 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.scss']
+  styleUrls: ['./admin.component.scss'],
+  standalone: true,
+  imports: [CommonModule, FormsModule]
 })
 export class AdminComponent {
   sales = [

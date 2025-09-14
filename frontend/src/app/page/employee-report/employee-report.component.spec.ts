@@ -15,6 +15,14 @@ describe('EmployeeReportComponent', () => {
 
     fixture = TestBed.createComponent(EmployeeReportComponent);
     component = fixture.componentInstance;
+    
+    // Add mock data to prevent undefined property access
+    component.newPrices = {
+      coffee: 250,
+      soda: 150,
+      menu: 800
+    };
+    
     fixture.detectChanges();
   });
 
