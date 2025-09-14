@@ -47,7 +47,7 @@ jobs:
           cd ${{ env.FRONTEND_DIR }} && npm audit --audit-level moderate
 
       - name: SonarCloud Scan
-        if: ${{ secrets.SONAR_TOKEN != '' }}
+        if: ${{ secrets.SONAR_TOKEN }}
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -110,7 +110,7 @@ jobs:
         continue-on-error: true
 
       - name: Upload coverage reports
-        if: ${{ secrets.CODECOV_TOKEN != '' }}
+        if: ${{ secrets.CODECOV_TOKEN }}
         uses: codecov/codecov-action@v3
         with:
           file: ./backend/coverage/lcov.info
@@ -140,7 +140,7 @@ jobs:
         run: cd ${{ env.FRONTEND_DIR }} && npm run test:ci
 
       - name: Upload coverage reports
-        if: ${{ secrets.CODECOV_TOKEN != '' }}
+        if: ${{ secrets.CODECOV_TOKEN }}
         uses: codecov/codecov-action@v3
         with:
           file: ./frontend/coverage/lcov.info
@@ -190,7 +190,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Docker Build & Push
     needs: [build]
-    if: github.ref == 'refs/heads/main' or github.ref == 'refs/heads/develop'
+    if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -199,7 +199,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Login to Container Registry
-        if: ${{ secrets.DOCKER_REGISTRY_PASSWORD != '' or secrets.GITHUB_TOKEN != '' }}
+        if: ${{ secrets.DOCKER_REGISTRY_PASSWORD || secrets.GITHUB_TOKEN }}
         uses: docker/login-action@v3
         with:
           registry: ${{ vars.DOCKER_REGISTRY_URL || 'ghcr.io' }}
@@ -224,7 +224,7 @@ jobs:
         with:
           context: ./backend
           file: ./backend/Dockerfile
-          push: ${{ secrets.DOCKER_REGISTRY_PASSWORD != '' or secrets.GITHUB_TOKEN != '' }}
+          push: ${{ secrets.DOCKER_REGISTRY_PASSWORD || secrets.GITHUB_TOKEN }}
           tags: ${{ vars.DOCKER_REGISTRY_URL || 'ghcr.io' }}/${{ github.repository }}/backend:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
@@ -236,7 +236,7 @@ jobs:
         with:
           context: ./frontend
           file: ./frontend/Dockerfile
-          push: ${{ secrets.DOCKER_REGISTRY_PASSWORD != '' or secrets.GITHUB_TOKEN != '' }}
+          push: ${{ secrets.DOCKER_REGISTRY_PASSWORD || secrets.GITHUB_TOKEN }}
           tags: ${{ vars.DOCKER_REGISTRY_URL || 'ghcr.io' }}/${{ github.repository }}/frontend:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
@@ -248,7 +248,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy to Staging
     needs: [docker-build]
-    if: github.ref == 'refs/heads/develop'
+    if: ${{ github.ref == 'refs/heads/develop' }}
     environment: 
       name: staging
       url: https://staging.feastfrenzy.com
@@ -263,7 +263,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy to Production
     needs: [docker-build]
-    if: github.ref == 'refs/heads/main'
+    if: ${{ github.ref == 'refs/heads/main' }}
     environment: 
       name: production
       url: https://feastfrenzy.com
@@ -278,7 +278,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Smoke Tests
     needs: [deploy-staging]
-    if: github.ref == 'refs/heads/develop'
+    if: ${{ github.ref == 'refs/heads/develop' }}
     steps:
       - name: Run smoke tests
         run: |
@@ -293,11 +293,11 @@ jobs:
     if: always()
     steps:
       - name: Notify on success
-        if: needs.deploy-production.result == 'success' or needs.deploy-staging.result == 'success'
+        if: ${{ needs.deploy-production.result == 'success' || needs.deploy-staging.result == 'success' }}
         run: |
           echo "Deployment successful! 🎉"
 
       - name: Notify on failure
-        if: needs.deploy-production.result == 'failure' or needs.deploy-staging.result == 'failure'
+        if: ${{ needs.deploy-production.result == 'failure' || needs.deploy-staging.result == 'failure' }}
         run: |
           echo "Deployment failed! ❌"
