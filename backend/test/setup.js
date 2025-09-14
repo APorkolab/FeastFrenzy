@@ -1,5 +1,5 @@
 const { Sequelize } = require('sequelize');
-const { execSync } = require('child_process');
+const { expect } = require('chai');
 
 // Test database configuration
 const testConfig = {
@@ -19,7 +19,7 @@ global.app = null;
 global.request = null;
 
 // Setup before all tests
-beforeAll(async () => {
+before(async () => {
   // Set test environment
   process.env.NODE_ENV = 'test';
   process.env.JWT_SECRET = 'test-jwt-secret-key';
@@ -30,7 +30,7 @@ beforeAll(async () => {
 
   // Import and initialize models
   try {
-    const models = require('../models');
+    // const models = require('../models'); // Will be implemented when models are available
     await global.testDb.sync({ force: true });
     console.log('✅ Test database synchronized');
   } catch (error) {
@@ -49,7 +49,7 @@ beforeAll(async () => {
 });
 
 // Cleanup after all tests
-afterAll(async () => {
+after(async () => {
   if (global.testDb) {
     await global.testDb.close();
     console.log('✅ Test database closed');
@@ -80,8 +80,10 @@ global.testUtils = {
     };
 
     try {
-      const { Employee } = require('../models');
-      return await Employee.create(userData);
+      // const { Employee } = require('../models'); // Will be implemented when models are available
+      // return await Employee.create(userData);
+      console.warn('⚠️  Test user creation skipped: models not available');
+      return userData;
     } catch (error) {
       console.warn('⚠️  Test user creation failed:', error.message);
       return userData;
@@ -100,8 +102,10 @@ global.testUtils = {
     };
 
     try {
-      const { Product } = require('../models');
-      return await Product.create(productData);
+      // const { Product } = require('../models'); // Will be implemented when models are available
+      // return await Product.create(productData);
+      console.warn('⚠️  Test product creation skipped: models not available');
+      return productData;
     } catch (error) {
       console.warn('⚠️  Test product creation failed:', error.message);
       return productData;
@@ -109,7 +113,7 @@ global.testUtils = {
   },
 
   // Create test purchase
-  createTestPurchase: async (employeeId, items = [], overrides = {}) => {
+  createTestPurchase: async (employeeId, _items = [], overrides = {}) => {
     const purchaseData = {
       employeeId,
       totalAmount: 25.50,
@@ -119,8 +123,10 @@ global.testUtils = {
     };
 
     try {
-      const { Purchase } = require('../models');
-      return await Purchase.create(purchaseData);
+      // const { Purchase } = require('../models'); // Will be implemented when models are available
+      // return await Purchase.create(purchaseData);
+      console.warn('⚠️  Test purchase creation skipped: models not available');
+      return purchaseData;
     } catch (error) {
       console.warn('⚠️  Test purchase creation failed:', error.message);
       return purchaseData;
@@ -156,41 +162,27 @@ global.testUtils = {
   randomPrice: () => Math.round((Math.random() * 100) * 100) / 100,
 };
 
-// Enhanced matchers for better assertions
-expect.extend({
-  toBeValidDate(received) {
-    const pass = received instanceof Date && !isNaN(received.getTime());
-    return {
-      message: () =>
-        pass
-          ? `Expected ${received} not to be a valid date`
-          : `Expected ${received} to be a valid date`,
-      pass,
-    };
+// Test utilities - custom assertions using Chai
+global.customAssertions = {
+  isValidDate: (received) => {
+    expect(received).to.be.an.instanceOf(Date);
+    expect(received.getTime()).to.not.be.NaN;
   },
 
-  toBeWithinRange(received, floor, ceiling) {
-    const pass = received >= floor && received <= ceiling;
-    return {
-      message: () =>
-        pass
-          ? `Expected ${received} not to be within range ${floor} - ${ceiling}`
-          : `Expected ${received} to be within range ${floor} - ${ceiling}`,
-      pass,
-    };
+  isWithinRange: (received, floor, ceiling) => {
+    expect(received).to.be.at.least(floor);
+    expect(received).to.be.at.most(ceiling);
   },
 
-  toHaveValidId(received) {
-    const pass = received && typeof received.id === 'number' && received.id > 0;
-    return {
-      message: () =>
-        pass
-          ? `Expected object not to have a valid ID`
-          : `Expected object to have a valid ID`,
-      pass,
-    };
+  hasValidId: (received) => {
+    expect(received).to.be.an('object');
+    expect(received.id).to.be.a('number');
+    expect(received.id).to.be.greaterThan(0);
   },
-});
+};
+
+// Make expect globally available
+global.expect = expect;
 
 // Global error handler for unhandled rejections in tests
 process.on('unhandledRejection', (reason, promise) => {
